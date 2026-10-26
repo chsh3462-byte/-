@@ -1,0 +1,3354 @@
+<!doctype html>
+<html lang="ko" data-standalone>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#203d35" />
+    <meta
+      name="description"
+      content="중세의 군단을 지휘하고 아르덴의 왕관을 차지하세요. 직접 그린 육각 전장에서 즐기는 턴제 전략 보드게임."
+    />
+    <title>HEXA CROWN · 왕관을 향한 진군</title>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMyMDNkMzUiLz48cGF0aCBkPSJtMTIgMTkgMTIgMTAgOC0xNiA4IDE2IDEyLTEwLTUgMzBIMTdaIiBmaWxsPSJub25lIiBzdHJva2U9IiNkNGJkN2QiIHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0xOSA0MmgyNiIgc3Ryb2tlPSIjZDRiZDdkIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4K" />
+    <style>
+@font-face {
+  font-family: Arden;
+  src: local("Noto Serif CJK KR"), local("Noto Serif KR");
+  font-display: swap;
+}
+:root {
+  --paper: #f5f2e9;
+  --panel: #fcfaf4;
+  --ink: #2b3c32;
+  --muted: #8b8e7e;
+  --line: #e2dfd2;
+  --forest: #294d3e;
+  --gold: #aa8b4e;
+  --blue: #438491;
+  --red: #aa6455;
+  --serif: Arden, "Noto Serif KR", Georgia, serif;
+  --sans:
+    "Noto Sans CJK KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  color: inherit;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  transition:
+    background 0.18s,
+    border-color 0.18s,
+    transform 0.18s;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid #bf9b53;
+  outline-offset: 4px;
+}
+button:hover:not(:disabled) {
+  filter: brightness(1.03);
+}
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+button svg {
+  pointer-events: none;
+}
+button {
+  border: 0;
+  background: none;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.hidden {
+  display: none !important;
+}
+.muted {
+  color: var(--muted);
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  font-weight: 600;
+}
+.serif {
+  font-family: var(--serif);
+}
+.crest {
+  width: 40px;
+  height: 47px;
+  flex-shrink: 0;
+}
+.unit-art {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.topbar {
+  height: 78px;
+  background: #203c33;
+  color: #e8e5d7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 36px;
+  border-bottom: 1px solid #466049;
+  gap: 30px;
+  position: relative;
+  z-index: 3;
+}
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.brand-mark {
+  color: #d5bd7b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 44px;
+  border: 1px solid #9a8750;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+}
+.brand-mark .icon {
+  width: 27px;
+  height: 27px;
+}
+.brand strong {
+  font-family: Georgia, serif;
+  letter-spacing: 3.3px;
+  font-weight: 500;
+  font-size: 22px;
+  display: block;
+}
+.brand small {
+  font-size: 9px;
+  letter-spacing: 3.5px;
+  color: #b8c2a6;
+  display: block;
+  margin-top: 3px;
+}
+.main-nav {
+  display: flex;
+  align-self: stretch;
+  gap: 32px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.main-nav button {
+  position: relative;
+  color: #acb7a5;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  padding: 0 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.main-nav button.active {
+  color: #e3cd94;
+}
+.main-nav button.active:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  background: #c7ad70;
+  width: 100%;
+  left: 0;
+}
+.main-nav .icon {
+  width: 17px;
+}
+.top-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.icon-button {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  color: inherit;
+}
+.icon-button:hover {
+  background: #ffffff0c;
+}
+.top-actions .icon {
+  width: 18px;
+}
+.avatar {
+  height: 34px;
+  width: 34px;
+  background: #47624c;
+  border: 1px solid #829075;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-family: var(--serif);
+  font-size: 14px;
+  color: #e3d4a5;
+}
+.player-profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-left: 15px;
+  border-left: 1px solid #54654c;
+}
+.player-profile small {
+  display: block;
+  color: #9da991;
+  font-size: 9px;
+  margin-top: 2px;
+}
+.game-shell {
+  max-width: 1680px;
+  margin: auto;
+  padding: 27px 32px 20px;
+}
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 23px;
+}
+.breadcrumb {
+  font-size: 10px;
+  color: #929381;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 7px;
+  letter-spacing: 0.4px;
+}
+.breadcrumb .icon {
+  width: 10px;
+  height: 10px;
+}
+.page-heading h1 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  line-height: 1.45;
+}
+.heading-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.edition-tag {
+  font-size: 9px;
+  border: 1px solid #d5ccb5;
+  padding: 4px 7px;
+  color: #9b885d;
+  letter-spacing: 1px;
+  border-radius: 3px;
+}
+.match-meta {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  color: #7e8875;
+  font-size: 11px;
+}
+.mode-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #eaece2;
+  border: 1px solid #dde1d2;
+  border-radius: 20px;
+  padding: 7px 12px;
+}
+.status-dot {
+  width: 6px;
+  height: 6px;
+  display: inline-block;
+  background: #6b8b65;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #6b8b6515;
+}
+.game-layout {
+  display: grid;
+  grid-template-columns: 232px minmax(400px, 1fr) 264px;
+  gap: 22px;
+  align-items: start;
+}
+.left-rail,
+.right-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: 0 2px 3px #353a2403;
+}
+.panel-inner {
+  padding: 18px;
+}
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  gap: 5px;
+}
+.section-heading small {
+  font-size: 9px;
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 0.4px;
+}
+.section-heading .icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  color: #9a946f;
+}
+.commander-banner {
+  padding: 18px 15px;
+  background: linear-gradient(125deg, #e6ebe1, #f6f5eb);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.commander-banner strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 17px;
+  margin: 4px 0;
+}
+.commander-banner small {
+  font-size: 9px;
+  color: #818b77;
+}
+.commander-banner .eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.8px;
+  color: #6e8a7a;
+}
+.faction-statline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 10px;
+}
+.faction-statline strong {
+  font-size: 16px;
+  font-family: Georgia, serif;
+  font-weight: 500;
+}
+.faction-statline small {
+  color: #a09d88;
+  font-size: 10px;
+}
+.vp-track {
+  display: flex;
+  gap: 4px;
+  height: 5px;
+  margin: 8px 0 12px;
+}
+.vp-track span {
+  height: 5px;
+  background: #eae9dc;
+  border-radius: 1px;
+  flex: 1;
+}
+.vp-track span.filled {
+  background: #608b79;
+}
+.vp-track.red span.filled {
+  background: #b87c68;
+}
+.faction-substats {
+  display: flex;
+  gap: 14px;
+  font-size: 10px;
+  color: #8a8e7f;
+}
+.faction-substats b {
+  color: #536755;
+  font-weight: 500;
+}
+.rival-row {
+  border-top: 1px solid var(--line);
+  margin: 14px -18px -18px;
+  padding: 14px 18px;
+  background: #f5f3e9;
+}
+.rival-row .crest {
+  width: 26px;
+  height: 30px;
+}
+.rival-name {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.rival-row .vp-track {
+  margin: 9px 0 0;
+}
+.resource-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 10px;
+}
+.resource-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.resource-symbol {
+  width: 37px;
+  height: 39px;
+  background: #f0eddf;
+  border: 1px solid #e8e4d3;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  color: #a39256;
+}
+.resource-symbol.wood {
+  color: #6b8761;
+  background: #eaf0e3;
+}
+.resource-symbol.iron {
+  color: #7c8c87;
+  background: #e9edeb;
+}
+.resource-symbol.gold {
+  color: #b2914b;
+  background: #f5edd7;
+}
+.resource-cell .icon {
+  width: 23px;
+  height: 23px;
+}
+.resource-cell small {
+  font-size: 9px;
+  color: #8d927e;
+  display: block;
+}
+.resource-cell strong {
+  font:
+    500 22px Georgia,
+    serif;
+  line-height: 1.3;
+}
+.trade-link {
+  border-top: 1px solid var(--line);
+  width: 100%;
+  padding: 12px 0 0;
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: #7b806c;
+}
+.trade-link span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.trade-link .icon {
+  width: 13px;
+  height: 13px;
+}
+.objective {
+  background: #efeddf;
+  border-color: #ded8c3;
+  position: relative;
+}
+.objective .section-heading {
+  color: #827242;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+.objective p {
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.9;
+  color: #7c785f;
+}
+.objective small {
+  display: block;
+  font-size: 9px;
+  line-height: 1.7;
+  color: #9a9580;
+  margin-top: 8px;
+}
+.journal {
+  min-height: 163px;
+}
+.log-list {
+  max-height: 166px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d7d7c7 transparent;
+}
+.log-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 13px;
+  font-size: 10px;
+  color: #7c8272;
+  line-height: 1.7;
+}
+.log-bullet {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #a8ad98;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.log-bullet.blue {
+  background: #66969a;
+}
+.log-bullet.red {
+  background: #b98270;
+}
+.log-item small {
+  font-size: 8px;
+  display: block;
+  color: #adae9e;
+  margin-top: 2px;
+}
+.battlefield {
+  background: #244f49;
+  border: 1px solid #366057;
+  border-radius: 9px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px #223a2410;
+}
+.map-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: absolute;
+  top: 20px;
+  left: 22px;
+  right: 18px;
+  z-index: 1;
+  pointer-events: none;
+}
+.map-top h2 {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: #e1dec1;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+.map-top small {
+  font-size: 8px;
+  color: #94b0a0;
+  letter-spacing: 1.8px;
+  display: block;
+  margin-top: 5px;
+}
+.map-top .icon-button {
+  pointer-events: auto;
+  color: #b0c4b2;
+  background: #173c3670;
+  border: 1px solid #76968533;
+  width: 29px;
+  height: 29px;
+}
+.map-top .icon {
+  width: 14px;
+  height: 14px;
+}
+.map-viewport {
+  width: 100%;
+  aspect-ratio: 1.09;
+  position: relative;
+  background: radial-gradient(
+    ellipse at 48% 45%,
+    #3c6960 0%,
+    #234d47 65%,
+    #1e443e 100%
+  );
+  overflow: hidden;
+}
+.board-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.board-tiles {
+  transform-origin: 450px 345px;
+  transition: transform 0.2s;
+}
+.hex-tile {
+  cursor: pointer;
+  outline: none;
+}
+.hex-tile .hex-outline {
+  transition:
+    stroke 0.15s,
+    fill 0.15s;
+  pointer-events: none;
+}
+.hex-tile:hover .hex-outline,
+.hex-tile:focus-visible .hex-outline {
+  stroke: #f0dfa6;
+  stroke-width: 2.5;
+}
+.tile-art,
+.tile-label,
+.tile-figure {
+  pointer-events: none;
+}
+.hex-tile .move-dot {
+  animation: soft-pulse 2s infinite;
+}
+.tile-figure {
+  filter: url(#shadow);
+}
+.tile-owner {
+  pointer-events: none;
+}
+.hex-tile.selected .hex-outline {
+  stroke: #f1d68d;
+  stroke-width: 3;
+}
+.hex-tile.attackable .hex-outline {
+  stroke: #e49c82;
+  stroke-width: 2.5;
+}
+.hex-tile.reachable .hex-outline {
+  stroke: #d9d6a3;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+.hex-tile:hover .tile-figure {
+  filter: url(#shadow) brightness(1.12);
+}
+.tile-number {
+  font-family: Georgia, serif;
+  font-size: 11px;
+  fill: #edf0d5;
+}
+.tile-number.hot {
+  fill: #e9c788;
+}
+.compass-label {
+  font-family: Georgia, serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  fill: #9cb09a;
+}
+.sea-label {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 4px;
+  fill: #abc2ae;
+  opacity: 0.28;
+}
+.map-bottom {
+  position: absolute;
+  bottom: 15px;
+  left: 20px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  gap: 8px;
+}
+.legend {
+  display: flex;
+  gap: 13px;
+  color: #b5c5ac;
+  font-size: 8px;
+}
+.legend span {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.legend i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border: 1px solid #819584;
+  transform: rotate(45deg);
+}
+.legend i.mine {
+  background: #6aa3a3;
+  border-color: #89b8b3;
+}
+.legend i.enemy {
+  background: #b2705b;
+  border-color: #c7937e;
+}
+.legend i.move {
+  border-color: #d8d8a7;
+  border-style: dashed;
+}
+.zoom {
+  display: flex;
+  background: #173b3370;
+  border: 1px solid #6c897155;
+  border-radius: 4px;
+  pointer-events: auto;
+  align-items: center;
+  height: 29px;
+}
+.zoom .icon-button {
+  height: 26px;
+  width: 27px;
+  color: #d0d7bc;
+}
+.zoom .icon {
+  width: 12px;
+  height: 12px;
+}
+.zoom small {
+  color: #b0c2a5;
+  font-size: 9px;
+  min-width: 31px;
+  text-align: center;
+}
+.board-caption {
+  padding: 12px 18px;
+  background: #1c3e36;
+  border-top: 1px solid #6e8e7040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #bdc6ac;
+  font-size: 10px;
+  gap: 10px;
+  min-height: 43px;
+}
+.board-caption .icon {
+  width: 14px;
+  height: 14px;
+  color: #c3b781;
+  margin-right: 6px;
+}
+.board-caption small {
+  font-size: 9px;
+  color: #829d83;
+  white-space: nowrap;
+}
+.turn-control {
+  margin-top: 16px;
+  padding: 17px 20px;
+  background: #fbf9f1;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+.turn-number {
+  border-right: 1px solid var(--line);
+  padding-right: 18px;
+  text-align: center;
+}
+.turn-number small {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #9e987d;
+  display: block;
+}
+.turn-number strong {
+  font:
+    28px Georgia,
+    serif;
+  color: #4d624b;
+}
+.turn-phase {
+  flex: 1;
+}
+.turn-phase strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.turn-phase p {
+  font-size: 9px;
+  color: #90927f;
+  margin-top: 5px;
+}
+.phase-steps {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 7px;
+  font-size: 8px;
+  color: #999b88;
+}
+.phase-steps span {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.phase-steps .active {
+  color: #527755;
+}
+.phase-steps i {
+  width: 4px;
+  height: 4px;
+  display: inline-block;
+  background: #a4b391;
+  border-radius: 50%;
+}
+.phase-steps .line {
+  width: 16px;
+  height: 1px;
+  background: #d2d6c3;
+}
+.end-turn {
+  background: #31533d;
+  border: 1px solid #38553b;
+  border-radius: 4px;
+  color: #f1edd9;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 19px;
+  font-size: 11px;
+  min-width: 123px;
+  justify-content: space-between;
+}
+.end-turn .icon {
+  width: 16px;
+  height: 16px;
+  color: #bfc69b;
+}
+.map-footnote {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #a1a18d;
+  margin: 12px 2px;
+}
+.map-footnote span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.map-footnote .icon {
+  width: 12px;
+  height: 12px;
+}
+.selected-panel {
+  border-color: #d8d4c2;
+}
+.selected-head {
+  padding: 16px 18px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: #898a74;
+}
+.unit-status {
+  font-size: 8px;
+  color: #638477;
+  background: #edf0e6;
+  padding: 3px 7px;
+  border-radius: 3px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.unit-status i {
+  width: 4px;
+  height: 4px;
+  background: #5c927e;
+  border-radius: 50%;
+}
+.portrait {
+  height: 184px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(
+    ellipse at 50% 70%,
+    #e0e4d8 0%,
+    #f6f5eb 55%,
+    #fcfaf4 80%
+  );
+  overflow: hidden;
+}
+.portrait:before {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border: 1px solid #d7dccb;
+  border-radius: 50%;
+  top: 16px;
+}
+.portrait:after {
+  content: "";
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border: 1px dashed #e0e0cf;
+  border-radius: 50%;
+  top: 6px;
+}
+.portrait .unit-art {
+  width: 178px;
+  height: 178px;
+  position: relative;
+  z-index: 1;
+}
+.portrait-coord {
+  position: absolute;
+  bottom: 9px;
+  right: 15px;
+  z-index: 2;
+  font:
+    9px Georgia,
+    serif;
+  letter-spacing: 1px;
+  color: #a5a891;
+}
+.unit-details {
+  padding: 0 18px 17px;
+}
+.unit-name {
+  text-align: center;
+}
+.unit-name .eyebrow {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #a39365;
+  margin-top: 3px;
+}
+.unit-name h2 {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 600;
+}
+.unit-name p {
+  font-size: 9px;
+  color: #9a9f89;
+  margin-top: 7px;
+}
+.health-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  margin: 15px 0 6px;
+  color: #92967f;
+}
+.health-line b {
+  font-weight: 500;
+  color: #6b8068;
+  font-size: 10px;
+}
+.health-track {
+  height: 4px;
+  display: flex;
+  gap: 3px;
+}
+.health-track i {
+  height: 4px;
+  background: #629484;
+  flex: 1;
+  border-radius: 1px;
+}
+.health-track i.empty {
+  background: #e4e8db;
+}
+.unit-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 16px 0;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.unit-stat {
+  text-align: center;
+  border-right: 1px solid var(--line);
+}
+.unit-stat:last-child {
+  border: 0;
+}
+.unit-stat .icon {
+  width: 14px;
+  height: 14px;
+  color: #9b987b;
+  margin-right: 3px;
+}
+.unit-stat strong {
+  font:
+    19px Georgia,
+    serif;
+}
+.unit-stat small {
+  display: block;
+  font-size: 8px;
+  color: #919680;
+  margin-top: 5px;
+}
+.unit-description {
+  font-size: 10px;
+  line-height: 1.9;
+  color: #8a8e7b;
+  margin-bottom: 14px;
+  min-height: 37px;
+}
+.action-row {
+  display: flex;
+  gap: 7px;
+}
+.action-row button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+  font-size: 10px;
+  padding: 9px 5px;
+  border: 1px solid #d9dfce;
+  border-radius: 4px;
+  background: #f1f4e9;
+  color: #61795c;
+}
+.action-row .icon {
+  width: 13px;
+  height: 13px;
+}
+.action-row .primary {
+  background: #e7ede1;
+  border-color: #d3ddc9;
+}
+.recruit-panel {
+  padding: 16px 15px;
+}
+.recruit-panel .section-heading {
+  margin-bottom: 9px;
+}
+.recruit-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 8px;
+  padding: 8px 2px;
+  border-bottom: 1px solid #e9e6da;
+  position: relative;
+}
+.recruit-card:last-child {
+  border: 0;
+}
+.recruit-card:hover {
+  background: #eeeee1;
+}
+.recruit-card .unit-art {
+  width: 44px;
+  height: 47px;
+  flex-shrink: 0;
+}
+.recruit-card strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+}
+.recruit-card small {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
+  color: #93947b;
+  font-size: 8px;
+}
+.recruit-card small span {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.recruit-card small .icon {
+  width: 10px;
+  height: 10px;
+}
+.recruit-card > .icon {
+  margin-left: auto;
+  color: #98a084;
+  width: 13px;
+  height: 13px;
+}
+.recruit-hint {
+  font-size: 8px;
+  color: #a3a38e;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+.dice-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  border-top: 1px solid var(--line);
+  background: #f6f3e8;
+}
+.dice-panel small {
+  display: block;
+  font-size: 8px;
+  color: #99947a;
+  margin-top: 3px;
+}
+.dice-panel strong {
+  font-size: 10px;
+  font-weight: 500;
+}
+.dice-pair {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dice-pair svg {
+  width: 26px;
+  height: 26px;
+  transform: rotate(-7deg);
+  filter: drop-shadow(0 2px 1px #86744315);
+}
+.dice-pair svg + svg {
+  transform: rotate(9deg);
+}
+.dice-pair b {
+  font:
+    16px Georgia,
+    serif;
+  color: #7a785a;
+  margin-left: 5px;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e0dfd1;
+  margin-top: 24px;
+  padding: 15px 0 0;
+  color: #aaa794;
+  font-size: 8px;
+  letter-spacing: 0.5px;
+}
+.footer-brand {
+  font-family: Georgia, serif;
+  letter-spacing: 2px;
+  font-size: 10px;
+}
+.footer button {
+  font-size: 9px;
+  color: #8d8e79;
+}
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background: #263f35;
+  color: #f0e8d0;
+  border: 1px solid #6f8160;
+  border-radius: 6px;
+  box-shadow: 0 8px 30px #162b3230;
+  padding: 14px 23px;
+  font-size: 12px;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s;
+  max-width: 90vw;
+  min-width: 240px;
+  text-align: center;
+}
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+dialog {
+  border: 1px solid #d0c4a4;
+  border-radius: 9px;
+  background: #faf7ee;
+  color: var(--ink);
+  max-width: 600px;
+  width: calc(100% - 32px);
+  padding: 0;
+  box-shadow: 0 25px 100px #0c251c70;
+}
+dialog::backdrop {
+  background: #122c27a8;
+  backdrop-filter: blur(4px);
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 26px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-header h2 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+}
+.modal-body {
+  padding: 24px 26px;
+  max-height: 70vh;
+  overflow: auto;
+}
+.modal-body > p {
+  line-height: 1.9;
+  color: #7c836e;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+.modal-body h3 {
+  font-size: 13px;
+  margin: 20px 0 10px;
+}
+.modal-body ul,
+.modal-body ol {
+  padding-left: 20px;
+  color: #7e846e;
+  font-size: 12px;
+  line-height: 2;
+}
+.modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin: 12px 0;
+}
+.modal-body td,
+.modal-body th {
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.modal-body th {
+  font-size: 10px;
+  color: #9a947d;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+.btn {
+  border: 1px solid #d3d8c5;
+  border-radius: 5px;
+  background: #eef0e5;
+  padding: 11px 16px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn.primary {
+  background: #355440;
+  color: #efe9d1;
+  border-color: #355440;
+}
+.btn .icon {
+  width: 15px;
+  height: 15px;
+}
+.mode-cards {
+  display: grid;
+  gap: 10px;
+}
+.mode-card {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  padding: 17px;
+}
+.mode-card:hover {
+  border-color: #9caf92;
+  background: #edf0e4;
+}
+.mode-card > .icon {
+  width: 25px;
+  height: 25px;
+  color: #75896a;
+}
+.mode-card strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 15px;
+}
+.mode-card small {
+  display: block;
+  color: #93947f;
+  font-size: 10px;
+  margin-top: 5px;
+}
+.room-form {
+  display: flex;
+  gap: 9px;
+  margin-top: 12px;
+}
+.room-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #d4d6c5;
+  border-radius: 4px;
+  background: white;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.room-code {
+  font:
+    34px Georgia,
+    serif;
+  letter-spacing: 9px;
+  text-align: center;
+  padding: 20px;
+  background: #eeefe2;
+  border: 1px dashed #bdc3a7;
+  border-radius: 5px;
+  color: #496448;
+}
+.room-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #849274;
+  margin-top: 14px;
+}
+.inline-error {
+  color: #a05849;
+  font-size: 11px;
+  margin-top: 12px;
+  min-height: 17px;
+}
+.trade-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 17px;
+  border: 1px solid var(--line);
+  margin: 9px 0;
+  border-radius: 4px;
+}
+.trade-option span {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+.victory-art {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.victory-art .crest {
+  width: 85px;
+  height: 100px;
+}
+.victory-copy {
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 23px;
+}
+.terrain-portrait {
+  height: 150px;
+  width: 180px;
+}
+.connection-notice {
+  background: #f6e7c6;
+  color: #896638;
+  padding: 8px;
+  text-align: center;
+  font-size: 11px;
+}
+.battlefield:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.battlefield:fullscreen .map-viewport {
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+.battlefield:fullscreen .board-svg {
+  max-height: calc(100vh - 45px);
+}
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@media (min-width: 1550px) {
+  .game-layout {
+    grid-template-columns: 260px minmax(400px, 1fr) 286px;
+    gap: 26px;
+  }
+  .game-shell {
+    padding-top: 32px;
+  }
+  .portrait {
+    height: 220px;
+  }
+  .portrait .unit-art {
+    width: 205px;
+    height: 205px;
+  }
+  .portrait:before {
+    top: 30px;
+  }
+  .portrait:after {
+    top: 20px;
+  }
+  .panel-inner {
+    padding: 21px;
+  }
+  .recruit-card {
+    padding: 11px 2px;
+  }
+}
+@media (max-width: 1180px) {
+  .game-shell {
+    padding: 23px 20px;
+  }
+  .game-layout {
+    grid-template-columns: 200px minmax(320px, 1fr) 222px;
+    gap: 15px;
+  }
+  .topbar {
+    padding: 0 22px;
+  }
+  .brand strong {
+    font-size: 19px;
+  }
+  .main-nav {
+    gap: 20px;
+  }
+  .panel-inner {
+    padding: 15px;
+  }
+  .rival-row {
+    margin: 13px -15px -15px;
+    padding: 13px 15px;
+  }
+  .portrait {
+    height: 155px;
+  }
+  .portrait .unit-art {
+    width: 153px;
+    height: 153px;
+  }
+  .portrait:before {
+    width: 120px;
+    height: 120px;
+  }
+  .portrait:after {
+    width: 140px;
+    height: 140px;
+  }
+  .unit-details {
+    padding: 0 15px 14px;
+  }
+  .resource-symbol {
+    width: 29px;
+    height: 34px;
+  }
+  .resource-symbol .icon {
+    width: 19px;
+  }
+  .resource-cell {
+    gap: 6px;
+  }
+  .resource-cell strong {
+    font-size: 19px;
+  }
+  .turn-control {
+    padding: 13px;
+    gap: 12px;
+  }
+  .end-turn {
+    padding: 11px 13px;
+    min-width: 100px;
+  }
+  .map-viewport {
+    aspect-ratio: 0.93;
+  }
+  .map-top {
+    top: 15px;
+    left: 17px;
+  }
+  .map-bottom {
+    left: 13px;
+    right: 12px;
+  }
+  .legend {
+    gap: 8px;
+    font-size: 7px;
+  }
+  .commander-banner strong {
+    font-size: 15px;
+  }
+  .commander-banner .crest {
+    width: 32px;
+  }
+  .match-meta {
+    gap: 10px;
+  }
+  .map-footnote {
+    font-size: 8px;
+  }
+  .unit-name h2 {
+    font-size: 19px;
+  }
+  .board-caption {
+    padding: 11px 13px;
+    font-size: 9px;
+  }
+  .board-caption small {
+    display: none;
+  }
+  .recruit-card .unit-art {
+    width: 36px;
+    height: 42px;
+  }
+  .recruit-card {
+    gap: 6px;
+  }
+  .section-heading {
+    font-size: 11px;
+  }
+  .page-heading h1 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 980px) {
+  .game-layout {
+    grid-template-columns: 195px 1fr;
+  }
+  .right-rail {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  .selected-panel {
+    display: grid;
+    grid-template-columns: 42% 58%;
+    position: relative;
+  }
+  .selected-head {
+    grid-column: 1/-1;
+  }
+  .portrait {
+    height: 200px;
+  }
+  .portrait .unit-art {
+    width: 175px;
+  }
+  .unit-details {
+    padding-top: 6px;
+  }
+  .unit-stats {
+    margin: 12px 0;
+  }
+  .unit-name h2 {
+    font-size: 18px;
+  }
+  .unit-description {
+    font-size: 9px;
+  }
+  .health-line {
+    margin-top: 12px;
+  }
+  .recruit-panel {
+    height: 100%;
+  }
+  .map-viewport {
+    aspect-ratio: 1.05;
+  }
+  .main-nav {
+    gap: 18px;
+  }
+  .main-nav button {
+    font-size: 11px;
+  }
+  .player-profile > div {
+    display: none;
+  }
+  .top-actions {
+    gap: 8px;
+  }
+  .brand small {
+    font-size: 8px;
+  }
+  .legend {
+    font-size: 8px;
+  }
+  .page-heading {
+    margin-bottom: 20px;
+  }
+  .game-shell {
+    max-width: 950px;
+  }
+  .log-list {
+    max-height: 116px;
+  }
+  .left-rail {
+    gap: 14px;
+  }
+  .map-footnote {
+    font-size: 9px;
+  }
+  .objective p {
+    font-size: 12px;
+  }
+  .match-meta > span {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
+  .topbar {
+    height: 66px;
+    padding: 0 17px;
+    gap: 12px;
+  }
+  .brand strong {
+    font-size: 17px;
+    letter-spacing: 2px;
+  }
+  .brand small {
+    font-size: 7px;
+    letter-spacing: 2px;
+  }
+  .brand {
+    gap: 8px;
+  }
+  .brand-mark {
+    width: 29px;
+    height: 34px;
+  }
+  .brand-mark .icon {
+    width: 21px;
+  }
+  .main-nav {
+    margin-left: auto;
+    margin-right: 0;
+    gap: 12px;
+  }
+  .main-nav button {
+    font-size: 0;
+    gap: 0;
+  }
+  .main-nav .icon {
+    width: 19px;
+  }
+  .top-actions {
+    gap: 2px;
+  }
+  .player-profile {
+    display: none;
+  }
+  .top-actions #soundButton {
+    display: none;
+  }
+  .game-shell {
+    padding: 20px 14px 12px;
+  }
+  .page-heading {
+    margin-bottom: 15px;
+    gap: 6px;
+  }
+  .breadcrumb {
+    font-size: 8px;
+    margin-bottom: 5px;
+  }
+  .page-heading h1 {
+    font-size: 21px;
+  }
+  .edition-tag {
+    display: none;
+  }
+  .mode-label {
+    font-size: 8px;
+    padding: 6px 8px;
+    white-space: nowrap;
+  }
+  .game-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .left-rail {
+    display: contents;
+  }
+  .commander-panel {
+    display: none;
+  }
+  .resources-panel {
+    width: 100%;
+    order: 0;
+  }
+  .resources-panel .panel-inner {
+    padding: 12px 14px;
+  }
+  .resources-panel .section-heading {
+    display: none;
+  }
+  .resource-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .resource-cell {
+    gap: 7px;
+  }
+  .resource-symbol {
+    width: 30px;
+    height: 32px;
+  }
+  .resource-cell strong {
+    font-size: 18px;
+  }
+  .resource-cell small {
+    font-size: 8px;
+  }
+  .trade-link {
+    display: none;
+  }
+  .dice-panel {
+    display: none;
+  }
+  .center-stage {
+    width: 100%;
+    order: 1;
+  }
+  .map-viewport {
+    aspect-ratio: 0.98;
+    min-height: 330px;
+  }
+  .map-top h2 {
+    font-size: 14px;
+  }
+  .map-top {
+    top: 15px;
+    left: 15px;
+  }
+  .map-top small {
+    font-size: 7px;
+  }
+  .map-bottom {
+    bottom: 12px;
+  }
+  .legend {
+    gap: 9px;
+    font-size: 7px;
+  }
+  .board-caption {
+    font-size: 9px;
+    min-height: 42px;
+  }
+  .map-footnote {
+    font-size: 8px;
+    margin-bottom: 0;
+  }
+  .turn-control {
+    margin-top: 12px;
+  }
+  .turn-phase strong {
+    font-size: 11px;
+  }
+  .turn-phase p {
+    font-size: 8px;
+  }
+  .end-turn {
+    font-size: 10px;
+    padding: 11px 12px;
+  }
+  .turn-number {
+    padding-right: 12px;
+  }
+  .right-rail {
+    order: 2;
+    width: 100%;
+    display: flex;
+    gap: 14px;
+  }
+  .selected-panel {
+    grid-template-columns: 40% 60%;
+  }
+  .portrait {
+    height: 200px;
+  }
+  .portrait .unit-art {
+    width: 180px;
+  }
+  .selected-head {
+    padding: 12px 16px 9px;
+  }
+  .unit-name {
+    text-align: left;
+  }
+  .unit-name h2 {
+    font-size: 19px;
+  }
+  .unit-name .eyebrow {
+    font-size: 7px;
+  }
+  .unit-name p {
+    font-size: 8px;
+  }
+  .unit-details {
+    padding-right: 16px;
+  }
+  .unit-description {
+    font-size: 9px;
+    margin-bottom: 10px;
+  }
+  .unit-stats {
+    padding: 10px 0;
+    margin: 11px 0;
+  }
+  .health-line {
+    margin-top: 10px;
+  }
+  .unit-stat strong {
+    font-size: 18px;
+  }
+  .action-row button {
+    font-size: 9px;
+    padding: 8px 3px;
+  }
+  .recruit-panel {
+    padding: 15px;
+  }
+  .recruit-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 14px;
+  }
+  .recruit-card:nth-last-child(2) {
+    border: 0;
+  }
+  .recruit-card {
+    padding: 8px 0;
+  }
+  .recruit-card .unit-art {
+    width: 41px;
+    height: 45px;
+  }
+  .objective {
+    display: none;
+  }
+  .journal {
+    width: 100%;
+    order: 3;
+    min-height: 0;
+  }
+  .journal .section-heading {
+    margin-bottom: 12px;
+  }
+  .log-list {
+    max-height: 100px;
+  }
+  .log-item {
+    font-size: 10px;
+    margin-bottom: 9px;
+  }
+  .footer {
+    margin-top: 18px;
+    padding-top: 12px;
+  }
+  .footer > span:nth-child(2) {
+    display: none;
+  }
+  .modal-header {
+    padding: 18px;
+  }
+  .modal-body {
+    padding: 18px;
+  }
+  .modal-body table {
+    font-size: 10px;
+  }
+  .modal-body td,
+  .modal-body th {
+    padding: 8px 3px;
+  }
+  .mode-card {
+    padding: 14px;
+  }
+  .room-form {
+    flex-wrap: wrap;
+  }
+  .room-form .btn {
+    flex: 1;
+  }
+  .room-code {
+    font-size: 28px;
+  }
+  .toast {
+    bottom: 20px;
+    font-size: 11px;
+    min-width: 260px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* Keep the board and the end-turn action together on laptop displays. */
+.map-viewport {
+  height: clamp(500px, calc(100vh - 350px), 650px);
+  aspect-ratio: auto;
+}
+.phase-steps {
+  white-space: nowrap;
+}
+.phase-steps .icon {
+  width: 13px;
+  height: 13px;
+}
+.unit-description {
+  color: #747e6c;
+}
+.log-item {
+  color: #727e6c;
+}
+.mobile-score {
+  display: none;
+}
+.footer .icon {
+  height: 12px;
+  width: 12px;
+}
+@media (max-width: 700px) {
+  .map-viewport {
+    height: auto;
+    min-height: 350px;
+    max-height: none;
+    aspect-ratio: 1.02;
+  }
+  .right-rail {
+    align-items: stretch;
+  }
+  .mobile-score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin: -2px 2px 13px;
+    font-size: 9px;
+    color: #6c7e69;
+  }
+  .mobile-score > span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mobile-score .crest {
+    width: 20px;
+    height: 23px;
+  }
+  .mobile-score b {
+    font:
+      15px Georgia,
+      serif;
+  }
+  .mobile-score b small {
+    font-size: 9px;
+    color: #9ba189;
+    margin-left: 3px;
+  }
+  .mobile-score .versus {
+    font:
+      9px Georgia,
+      serif;
+    color: #a6a28a;
+    letter-spacing: 1px;
+  }
+  .resources-panel .trade-link {
+    display: flex;
+    margin-top: 10px;
+    padding-top: 8px;
+    font-size: 9px;
+  }
+  .trade-link .icon {
+    width: 12px;
+    height: 12px;
+  }
+  .phase-steps {
+    font-size: 7px;
+    gap: 5px;
+  }
+  .phase-steps .line {
+    width: 8px;
+  }
+  .phase-steps .icon {
+    width: 10px;
+    height: 10px;
+  }
+  .turn-control {
+    gap: 10px;
+  }
+  .turn-number {
+    padding-right: 10px;
+  }
+  .end-turn {
+    min-width: 92px;
+    gap: 10px;
+  }
+}
+
+.invite-link { display: block; width: 100%; box-sizing: border-box; margin-top: 8px; padding: 12px; border: 1px solid #b8b09a; border-radius: 6px; background: #fffaf0; color: #183d39; font: inherit; }
+.invite-help { font-size: 12px; overflow-wrap: anywhere; }
+
+</style>
+
+  </head>
+  <body>
+    <div id="app">
+      <div style="max-width:480px;margin:15vh auto;padding:30px;font-family:sans-serif;line-height:1.8">
+        <h1>HEXA CROWN</h1>
+        <p>전장을 준비하고 있습니다.</p>
+        <p>파일을 직접 열었다면 아래의 설치 없는 버전을 선택하세요.</p>
+        <a href="./play.html">설치 없이 게임 열기</a>
+        <noscript><p>게임을 실행하려면 브라우저에서 JavaScript를 허용해 주세요.</p></noscript>
+      </div>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="modal"><div id="modalContent"></div></dialog>
+  <script>
+"use strict";
+(() => {
+const FACTIONS = {
+  blue: { name: "푸른 사자", title: "푸른 사자 군단", color: "#4e9eaa" },
+  red: { name: "붉은 독수리", title: "붉은 독수리 군단", color: "#b96552" },
+};
+const RESOURCES = {
+  food: "식량",
+  wood: "목재",
+  iron: "철광",
+  gold: "황금",
+};
+const TERRAIN = {
+  plains: {
+    name: "황금빛 평원",
+    resource: "food",
+    defense: 0,
+    color: "#b6bb78",
+    desc: "비옥한 들판에서 군단을 위한 식량을 생산합니다.",
+  },
+  forest: {
+    name: "오래된 수림",
+    resource: "wood",
+    defense: 1,
+    color: "#719575",
+    desc: "울창한 숲이 목재와 방어 보너스 +1을 제공합니다.",
+  },
+  hills: {
+    name: "회색빛 산맥",
+    resource: "iron",
+    defense: 2,
+    color: "#9ca79c",
+    desc: "철광이 풍부한 고지대. 방어 보너스 +2를 받습니다.",
+  },
+  gold: {
+    name: "왕의 황금 광산",
+    resource: "gold",
+    defense: 1,
+    color: "#c8aa64",
+    desc: "황금을 생산하는 전략적 요충지. 점령 시 승리 점수 +1.",
+  },
+  water: {
+    name: "고요한 호수",
+    resource: null,
+    defense: 0,
+    color: "#568e99",
+    desc: "깊은 호수는 군단이 통과할 수 없습니다.",
+  },
+};
+const UNITS = {
+  infantry: {
+    name: "보병 연대",
+    english: "INFANTRY",
+    hp: 10,
+    attack: 4,
+    move: 1,
+    range: 1,
+    cost: { food: 2, iron: 1 },
+    desc: "견고한 방패와 장창으로 전선을 지키는 군단의 중심.",
+  },
+  archer: {
+    name: "장궁병 부대",
+    english: "LONGBOWMEN",
+    hp: 8,
+    attack: 4,
+    move: 1,
+    range: 2,
+    cost: { food: 1, wood: 2 },
+    desc: "두 칸 너머의 적을 겨냥합니다. 보병에게 추가 피해 +2.",
+  },
+  knight: {
+    name: "왕실 기병대",
+    english: "ROYAL CAVALRY",
+    hp: 12,
+    attack: 5,
+    move: 2,
+    range: 1,
+    cost: { food: 2, iron: 2, gold: 1 },
+    desc: "두 칸을 가로지르는 기동력. 궁병과 공성 병기에 돌격 피해 +2.",
+  },
+  siege: {
+    name: "공성 투석기",
+    english: "TREBUCHET",
+    hp: 9,
+    attack: 6,
+    move: 1,
+    range: 2,
+    cost: { wood: 2, iron: 2, gold: 2 },
+    desc: "견고한 성벽을 무너뜨립니다. 건물에 주둔한 적에게 피해 +3.",
+  },
+};
+const OUTPOST_COST = { wood: 2, iron: 1, gold: 1 };
+const key = (t) => `${t.q},${t.r}`;
+const tileAt = (s, k) => s.tiles.find((t) => key(t) === k);
+const distance = (a, b) =>
+  (Math.abs(a.q - b.q) +
+    Math.abs(a.r - b.r) +
+    Math.abs(a.q + a.r - b.q - b.r)) /
+  2;
+const neighbors = (s, t) => s.tiles.filter((n) => distance(n, t) === 1);
+const makeUnit = (type, owner) => ({
+  type,
+  owner,
+  hp: UNITS[type].hp,
+  moved: false,
+  attacked: false,
+});
+function addLog(s, text, owner = "system") {
+  s.logs.unshift({ text, owner, turn: s.turn, id: ++s.logId });
+  s.logs = s.logs.slice(0, 60);
+}
+function createGame(mode = "ai", random = Math.random) {
+  const s = {
+    version: 1,
+    mode,
+    turn: 1,
+    current: "blue",
+    winner: null,
+    reason: "",
+    dice: [3, 4],
+    tiles: [],
+    logs: [],
+    logId: 0,
+    resources: {
+      blue: { food: 4, wood: 3, iron: 2, gold: 2 },
+      red: { food: 4, wood: 3, iron: 2, gold: 2 },
+    },
+  };
+  const numbers = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 5, 6, 8, 9];
+  for (let r = -3; r <= 3; r++)
+    for (let q = Math.max(-3, -r - 3); q <= Math.min(3, -r + 3); q++) {
+      const roll = random();
+      s.tiles.push({
+        q,
+        r,
+        terrain: roll < 0.38 ? "plains" : roll < 0.72 ? "forest" : "hills",
+        number: numbers[Math.floor(random() * numbers.length)],
+        owner: null,
+        building: null,
+        unit: null,
+      });
+    }
+  for (const k of ["0,0", "-2,2", "2,-2"])
+    Object.assign(tileAt(s, k), {
+      terrain: "gold",
+      number: k === "0,0" ? 7 : 6,
+    });
+  for (const k of ["-1,-1", "1,1"])
+    Object.assign(tileAt(s, k), { terrain: "water", number: null });
+  for (const owner of ["blue", "red"]) {
+    const sign = owner === "blue" ? -1 : 1;
+    Object.assign(tileAt(s, `${3 * sign},0`), {
+      terrain: "plains",
+      number: owner === "blue" ? 6 : 8,
+      owner,
+      building: "citadel",
+      unit: makeUnit("infantry", owner),
+    });
+    Object.assign(tileAt(s, `${2 * sign},0`), {
+      terrain: "forest",
+      number: owner === "blue" ? 8 : 6,
+      owner,
+      unit: makeUnit("knight", owner),
+    });
+  }
+  addLog(s, "아르덴의 왕관을 위한 원정이 시작되었습니다.");
+  roll(s, random);
+  return s;
+}
+function score(s, owner) {
+  const owned = s.tiles.filter((t) => t.owner === owner);
+  return {
+    territory: owned.length,
+    vp:
+      Math.floor(owned.length / 3) +
+      owned.reduce(
+        (v, t) =>
+          v +
+          (t.building === "citadel" ? 2 : t.building === "outpost" ? 1 : 0) +
+          (t.terrain === "gold" ? 1 : 0),
+        0,
+      ),
+    army: owned.filter((t) => t.unit?.owner === owner).length,
+  };
+}
+function options(s, from) {
+  const moves = [],
+    attacks = [];
+  const t = tileAt(s, from),
+    u = t?.unit;
+  if (!u || u.owner !== s.current || s.winner) return { moves, attacks };
+  const spec = UNITS[u.type];
+  if (!u.moved) {
+    const visited = new Set([from]),
+      queue = [[t, 0]];
+    while (queue.length) {
+      const [at, d] = queue.shift();
+      if (d >= spec.move) continue;
+      for (const n of neighbors(s, at)) {
+        const k = key(n);
+        if (
+          visited.has(k) ||
+          n.terrain === "water" ||
+          (n.unit && n.unit.owner !== u.owner)
+        )
+          continue;
+        visited.add(k);
+        queue.push([n, d + 1]);
+        if (!n.unit) moves.push(k);
+      }
+    }
+  }
+  if (!u.attacked)
+    for (const n of s.tiles)
+      if (n.unit && n.unit.owner !== u.owner && distance(t, n) <= spec.range)
+        attacks.push(key(n));
+  return { moves, attacks };
+}
+const canAfford = (s, owner, cost) =>
+  Object.entries(cost).every(([k, v]) => s.resources[owner][k] >= v);
+function pay(s, owner, cost) {
+  for (const [k, v] of Object.entries(cost)) s.resources[owner][k] -= v;
+}
+function capture(s, t, owner, loot = true) {
+  if (t.owner !== owner) {
+    t.owner = owner;
+    const res = TERRAIN[t.terrain].resource;
+    if (loot && res) s.resources[owner][res]++;
+    addLog(
+      s,
+      `${TERRAIN[t.terrain].name} 점령${loot && res ? ` · ${RESOURCES[res]} +1` : ""}`,
+      owner,
+    );
+  }
+}
+function damage(from, to) {
+  const a = from.unit.type,
+    b = to.unit.type;
+  let n = UNITS[a].attack;
+  if (a === "archer" && b === "infantry") n += 2;
+  if (a === "knight" && ["archer", "siege"].includes(b)) n += 2;
+  if (a === "siege" && to.building) n += 3;
+  return Math.max(2, n - TERRAIN[to.terrain].defense - (to.building ? 1 : 0));
+}
+function victory(s) {
+  for (const p of ["blue", "red"]) {
+    const base = tileAt(s, p === "blue" ? "3,0" : "-3,0");
+    if (base.owner === p || score(s, p).vp >= 10) {
+      s.winner = p;
+      s.reason =
+        base.owner === p
+          ? "상대의 본성을 함락했습니다."
+          : "승리 점수 10점에 도달했습니다.";
+      addLog(s, `${FACTIONS[p].name}의 승리 · ${s.reason}`, p);
+      return;
+    }
+  }
+}
+function roll(s, random = Math.random) {
+  s.dice = [1 + Math.floor(random() * 6), 1 + Math.floor(random() * 6)];
+  const sum = s.dice[0] + s.dice[1];
+  const gains = { blue: 0, red: 0 };
+  if (sum === 7)
+    for (const p of ["blue", "red"]) {
+      s.resources[p].food++;
+      s.resources[p].wood++;
+      gains[p] += 2;
+    }
+  for (const t of s.tiles)
+    if (t.owner && t.number === sum && TERRAIN[t.terrain].resource) {
+      const n = t.building ? 2 : 1;
+      s.resources[t.owner][TERRAIN[t.terrain].resource] += n;
+      gains[t.owner] += n;
+    }
+  addLog(
+    s,
+    `생산 주사위 ${sum} · 푸른 사자 +${gains.blue} / 붉은 독수리 +${gains.red}`,
+  );
+}
+function spawnTile(s, owner, selected) {
+  const valid = (t) => t && t.owner === owner && t.building && !t.unit;
+  const picked = tileAt(s, selected);
+  if (valid(picked)) return picked;
+  return (
+    s.tiles.find(valid) ||
+    s.tiles
+      .filter((t) => t.owner === owner && t.building === "citadel")
+      .flatMap((t) => neighbors(s, t))
+      .find(
+        (t) =>
+          !t.unit && t.terrain !== "water" && (!t.owner || t.owner === owner),
+      )
+  );
+}
+function act(s, a, actor = s.current, random = Math.random) {
+  if (s.winner) return { ok: false, error: "이미 종료된 전투입니다." };
+  if (actor !== s.current)
+    return { ok: false, error: "상대 군단의 차례입니다." };
+  const from = tileAt(s, a.from),
+    to = tileAt(s, a.to),
+    t = tileAt(s, a.tile);
+  let selected = a.from;
+  switch (a.type) {
+    case "move": {
+      if (!options(s, a.from).moves.includes(a.to))
+        return { ok: false, error: "이동할 수 없는 영토입니다." };
+      to.unit = from.unit;
+      from.unit = null;
+      to.unit.moved = true;
+      capture(s, to, actor);
+      selected = a.to;
+      addLog(s, `${UNITS[to.unit.type].name} 진군 · ${a.to}`, actor);
+      break;
+    }
+    case "attack": {
+      if (!options(s, a.from).attacks.includes(a.to))
+        return { ok: false, error: "공격할 수 없는 대상입니다." };
+      const n = damage(from, to),
+        u = from.unit;
+      u.moved = true;
+      u.attacked = true;
+      to.unit.hp -= n;
+      addLog(s, `${UNITS[u.type].name} 공격 · 적 피해 ${n}`, actor);
+      if (to.unit.hp <= 0) {
+        to.unit = null;
+        if (distance(from, to) === 1) {
+          to.unit = u;
+          from.unit = null;
+          capture(s, to, actor);
+          selected = a.to;
+        }
+        addLog(s, "적 부대를 격파했습니다.", actor);
+      } else if (distance(from, to) === 1) {
+        u.hp -= Math.max(1, Math.floor(UNITS[to.unit.type].attack * 0.6));
+        if (u.hp <= 0) from.unit = null;
+      }
+      break;
+    }
+    case "recruit": {
+      if (!Object.hasOwn(UNITS, a.unit))
+        return { ok: false, error: "알 수 없는 병종입니다." };
+      if (!canAfford(s, actor, UNITS[a.unit].cost))
+        return { ok: false, error: "모집에 필요한 자원이 부족합니다." };
+      const target = spawnTile(s, actor, a.tile);
+      if (!target)
+        return {
+          ok: false,
+          error: "본성 인접 영토나 전초기지에 빈자리가 필요합니다.",
+        };
+      pay(s, actor, UNITS[a.unit].cost);
+      target.unit = makeUnit(a.unit, actor);
+      capture(s, target, actor, false);
+      selected = key(target);
+      addLog(s, `${UNITS[a.unit].name} 모집 완료`, actor);
+      break;
+    }
+    case "build":
+      if (!t || t.owner !== actor || t.building || t.terrain === "water")
+        return { ok: false, error: "건물이 없는 아군 영토를 선택하세요." };
+      if (!canAfford(s, actor, OUTPOST_COST))
+        return { ok: false, error: "목재 2 · 철광 1 · 황금 1이 필요합니다." };
+      pay(s, actor, OUTPOST_COST);
+      t.building = "outpost";
+      selected = a.tile;
+      addLog(s, "전초기지 건설 · 승리 점수 +1", actor);
+      break;
+    case "heal":
+      if (
+        !t?.unit ||
+        t.unit.owner !== actor ||
+        t.unit.hp === UNITS[t.unit.type].hp
+      )
+        return { ok: false, error: "회복이 필요한 아군 부대를 선택하세요." };
+      if (s.resources[actor].food < 1)
+        return { ok: false, error: "식량 1이 필요합니다." };
+      s.resources[actor].food--;
+      t.unit.hp = Math.min(UNITS[t.unit.type].hp, t.unit.hp + 4);
+      selected = a.tile;
+      addLog(s, "부대 재보급 · 체력 +4", actor);
+      break;
+    case "trade":
+      if (
+        !["food", "wood", "iron"].includes(a.resource) ||
+        s.resources[actor][a.resource] < 3
+      )
+        return { ok: false, error: "교역할 자원이 3개 이상 필요합니다." };
+      s.resources[actor][a.resource] -= 3;
+      s.resources[actor].gold++;
+      addLog(s, `${RESOURCES[a.resource]} 3 → 황금 1 교역`, actor);
+      break;
+    case "end":
+      s.current = actor === "blue" ? "red" : "blue";
+      if (s.current === "blue") s.turn++;
+      for (const tile of s.tiles)
+        if (tile.unit?.owner === s.current) {
+          tile.unit.moved = false;
+          tile.unit.attacked = false;
+        }
+      roll(s, random);
+      selected = key(
+        s.tiles.find((tile) => tile.unit?.owner === s.current) || s.tiles[0],
+      );
+      break;
+    default:
+      return { ok: false, error: "알 수 없는 명령입니다." };
+  }
+  victory(s);
+  return { ok: true, selected };
+}
+function aiAction(s) {
+  const p = s.current,
+    enemy = p === "blue" ? "red" : "blue";
+  for (const t of s.tiles.filter((t) => t.unit?.owner === p)) {
+    const o = options(s, key(t));
+    if (o.attacks.length)
+      return {
+        type: "attack",
+        from: key(t),
+        to: o.attacks.sort(
+          (a, b) => tileAt(s, a).unit.hp - tileAt(s, b).unit.hp,
+        )[0],
+      };
+    if (o.moves.length) {
+      const base =
+        s.tiles.find((t) => t.building === "citadel" && t.owner === enemy) ||
+        s.tiles[0];
+      const value = (k) => {
+        const n = tileAt(s, k);
+        return (
+          (n.owner !== p ? 16 : 0) +
+          (n.terrain === "gold" && n.owner !== p ? 12 : 0) +
+          (n.building && n.owner !== p ? 40 : 0) -
+          distance(n, base) * 3
+        );
+      };
+      return {
+        type: "move",
+        from: key(t),
+        to: o.moves.sort((a, b) => value(b) - value(a))[0],
+      };
+    }
+  }
+  const count = s.tiles.filter((t) => t.unit?.owner === p).length;
+  if (count < 5)
+    for (const type of ["knight", "archer", "infantry"])
+      if (canAfford(s, p, UNITS[type].cost) && spawnTile(s, p))
+        return { type: "recruit", unit: type };
+  const site = s.tiles.find((t) => t.owner === p && !t.building);
+  if (site && canAfford(s, p, OUTPOST_COST))
+    return { type: "build", tile: key(site) };
+  return { type: "end" };
+}
+
+
+// Original vector illustrations, drawn for HEXA CROWN. No remote image assets.
+const icons = {
+  crown: '<path d="m3 7 5 4 4-7 4 7 5-4-2 12H5Z"/><path d="M6 16h12"/>',
+  sword:
+    '<path d="m15 3 6 0 0 6-11 11-6-6Z"/><path d="m3 13 8 8M7 17l-4 4M15 3l6 6"/>',
+  shield:
+    '<path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="M12 7v9M8 11h8"/>',
+  flag: '<path d="M5 22V3m0 1c5-4 9 4 15 0v10c-6 4-10-4-15 0"/>',
+  food: '<path d="M12 22V5m0 9C5 14 5 8 5 8s7 0 7 6Zm0-5C6 9 7 3 7 3s5 1 5 6Zm0 9c7 0 7-6 7-6s-7 0-7 6Zm0-9c6 0 5-6 5-6s-5 1-5 6Z"/>',
+  wood: '<path d="m12 2-6 8h3l-5 7h16l-5-7h3Z"/><path d="M12 17v5M8 22h8"/>',
+  iron: '<path d="m3 17 5-9 7-4 6 13-5 4H8Z"/><path d="m8 8 5 5 2-9m-2 9 8 4m-8-4L8 21"/>',
+  gold: '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 4 16 4 16 0V6M4 12c0 4 16 4 16 0"/>',
+  arrow: '<path d="M4 12h16m-6-6 6 6-6 6"/>',
+  chevron: '<path d="m9 5 7 7-7 7"/>',
+  close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  volume: '<path d="m11 4-6 5H2v6h3l6 5Zm5 4c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/>',
+  mute: '<path d="m11 4-6 5H2v6h3l6 5Zm5 5 6 6m-6 0 6-6"/>',
+  book: '<path d="M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Zm0 0v16"/>',
+  expand: '<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  minus: '<path d="M5 12h14"/>',
+  reset: '<path d="M3 10a9 9 0 1 1 1 8M3 4v6h6"/>',
+  globe:
+    '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
+  link: '<path d="m10 7 3-3a5 5 0 0 1 7 7l-4 4M14 17l-3 3a5 5 0 0 1-7-7l4-4m0 8 8-8"/>',
+  check: '<path d="m5 12 5 5L20 7"/>',
+  health: '<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6Z"/>',
+  castle: '<path d="M3 21V7h4v3h3V3h4v7h3V7h4v14ZM10 21v-6h4v6"/>',
+  target:
+    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3"/>',
+  move: '<path d="M12 3v18M3 12h18M8 7l4-4 4 4M8 17l4 4 4-4M7 8l-4 4 4 4m10-8 4 4-4 4"/>',
+  trade: '<path d="M3 7h17m-4-4 4 4-4 4M21 17H4m4-4-4 4 4 4"/>',
+  people:
+    '<circle cx="9" cy="7" r="3"/><path d="M3 21v-4a6 6 0 0 1 12 0v4M16 4a3 3 0 0 1 0 6m2 4c4 0 4 4 4 7"/>',
+  hourglass: '<path d="M5 3h14M5 21h14M7 3v4l10 10v4M17 3v4L7 17v4"/>',
+  leaf: '<path d="M5 19C-2 7 12 3 21 3c0 10-4 19-16 16ZM5 19 16 8"/>',
+};
+const icon = (name, cls = "") =>
+  `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] || icons.flag}</svg>`;
+function crest(owner = "blue", cls = "") {
+  const blue = owner === "blue";
+  return `<svg class="crest ${cls}" viewBox="0 0 60 70" aria-hidden="true"><path d="M5 5 30 1 55 5v30c0 17-25 32-25 32S5 52 5 35Z" fill="${blue ? "#295865" : "#854b42"}" stroke="#b49b60" stroke-width="2"/><path d="M10 10 30 6l20 4v25c0 12-20 26-20 26S10 47 10 35Z" fill="none" stroke="#d5c28b" stroke-opacity=".45"/>${blue ? '<path d="m23 20 1-6 6 3 5-3 3 7-4 5 5 6-4 6 5 7 5 2-1 5-9-3-4-8-4 5-7 5-5-1 1-4 6-2 3-8-5-5-3-2-1-7 3-5 3 3-1 4 4 2 5-5-5-1Z" fill="#dfc98d"/><path d="M35 32c16-11 15 13 7 8" fill="none" stroke="#dfc98d" stroke-width="3"/>' : '<path d="m30 16 5 7 12-5-4 10 7 4-13 5 7 7-10-2-4 11-4-11-10 2 7-7-13-5 7-4-4-10 12 5Z" fill="#dfc98d"/>'}<path d="m27 10 3 2 3-2" fill="none" stroke="#e0cb92"/></svg>`;
+}
+const defs = `<defs>
+ <linearGradient id="steel" x1="0" x2="1"><stop stop-color="#687a7c"/><stop offset=".45" stop-color="#e0e5d9"/><stop offset=".6" stop-color="#acbcb7"/><stop offset="1" stop-color="#526669"/></linearGradient>
+ <linearGradient id="horse" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e6dfc6"/><stop offset="1" stop-color="#928d79"/></linearGradient>
+ <linearGradient id="cloth-blue" x1="0" x2="1" y2="1"><stop stop-color="#69a6ac"/><stop offset="1" stop-color="#245364"/></linearGradient>
+ <linearGradient id="cloth-red" x1="0" x2="1" y2="1"><stop stop-color="#cb8770"/><stop offset="1" stop-color="#783e3b"/></linearGradient>
+ <linearGradient id="stone" x1="0" x2="1"><stop stop-color="#e4d7b3"/><stop offset="1" stop-color="#9d947a"/></linearGradient>
+ <linearGradient id="gold" x1="0" x2="1" y2="1"><stop stop-color="#ead69b"/><stop offset=".5" stop-color="#b9964f"/><stop offset="1" stop-color="#806c3e"/></linearGradient>
+ <filter id="shadow" x="-40%" y="-40%" width="180%" height="200%"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#102d29" flood-opacity=".3"/></filter>
+ <pattern id="waves" width="56" height="38" patternUnits="userSpaceOnUse"><path d="M4 19q6-5 12 0t12 0M37 3q5-4 10 0M34 33q6-5 12 0" fill="none" stroke="#c1dac5" stroke-opacity=".09" stroke-width="1"/></pattern>
+ <pattern id="grain" width="19" height="17" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".6" fill="#fff" opacity=".11"/><circle cx="12" cy="10" r=".5" fill="#132f29" opacity=".14"/><path d="M6 14h2M15 3h2" stroke="#15362a" opacity=".09"/></pattern>
+ <symbol id="pine" viewBox="0 0 30 48"><path d="M14 34h3v13h-3" fill="#6e6850"/><path d="m15 1-10 19h5L1 35l14 7 14-7-9-15h5Z" fill="#305d4b"/><path d="m15 1 0 41 14-7-9-15h5Z" fill="#244d42"/><path d="m15 3-7 15 7-3m-2 7-8 12 10-4" fill="#54806a"/></symbol>
+ <symbol id="mountain" viewBox="0 0 70 60"><path d="M1 54 28 4l17 22 7-8 17 36-35 5Z" fill="#707f79"/><path d="m28 4 6 55 35-5-17-36-7 8Z" fill="#536b65"/><path d="m28 4-11 21 9-4 6 7 4-7 9 5Z" fill="#e2dfcb"/><path d="m28 4 4 24 4-7 9 5Z" fill="#bac9be"/><path d="m52 18-7 8 10 13 3-10Z" fill="#c8d0bf"/><path d="m15 38-5 12 14-4m18-5 8 9" fill="none" stroke="#9baa97" stroke-width="1"/></symbol>
+ <symbol id="wheat" viewBox="0 0 35 40"><path d="m10 37 8-29m4 31 3-25M2 32l8-22" stroke="#8a8145" fill="none" stroke-width="1.3"/><g fill="#e3cf81" stroke="#9e914c" stroke-width=".5"><path d="M17 15C9 13 13 7 17 15Zm1-3c-4-6 3-10 0 0Zm-3 10c-8-2-4-9 0 0Zm3-5c7-3 5-8 0 0Zm-1 6c7-3 5-8 0 0ZM8 17c-7-1-4-8 0 0Zm2-6c-4-6 3-10 0 0ZM6 23c-7-1-4-8 0 0Zm2-5c7-3 5-8 0 0Zm17 5c-6-3-4-8 0 0Zm0-5c-4-6 3-10 0 0Zm0 12c7-4 4-9 0 0Z"/></g></symbol>
+ </defs>`;
+function unitArt(type, owner = "blue") {
+  const cloth = `url(#cloth-${owner})`;
+  const common = `stroke="#344c4b" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"`;
+  const base = `<ellipse cx="79" cy="141" rx="53" ry="10" fill="#213e37" opacity=".12"/><path d="M29 135q50 15 101 0v8q-50 18-101 0Z" fill="#746d50" stroke="#4c5948"/><ellipse cx="79" cy="135" rx="50" ry="10" fill="#a4a989" stroke="#616c55"/><ellipse cx="79" cy="133" rx="44" ry="7" fill="#b9bea0"/>`;
+  let figure = "";
+  if (type === "knight")
+    figure = `<g ${common}>
+ <path d="M117 76q22-8 18 12l-4 25 8 7q-17 3-16-14l-1-17" fill="#59615a"/>
+ <path d="m52 99-5 17-9 13 9 3 15-17 6-19m32-1 9 17-3 17h9l5-22-9-22" fill="#9f9e8b"/>
+ <path d="M46 72q5-17 14-19l13 19 31 1q19 2 18 20l-5 15-47-3-12-13-7 12-5 24h-9l2-27-1-16-11-3-1-8 8-8 4-15 7 9Z" fill="url(#horse)"/>
+ <path d="m42 53 4-11 5 14m-9 11-6 7 12 5 4-11" fill="#d5d9c5"/>
+ <path d="m49 54 8 2 12 21-7 9-7-18-7-2" fill="#52635d"/>
+ <path d="m38 78 9 2 14-5m-21-5 11 1" fill="none" stroke="#645c45" stroke-width="2"/>
+ <circle cx="42" cy="68" r="1.5" fill="#243e3d" stroke="none"/>
+ <path d="M66 78q19-12 43-2l8 29-19 11-34-10-6-15Z" fill="${cloth}"/><path d="m68 99 30 10 15-7" fill="none" stroke="#dac083" stroke-width="3"/>
+ <path d="m78 65 5 20 10 21-7 15 10 2 9-19-9-26-1-16" fill="url(#steel)"/><path d="m86 121-3 6h15l-2-5" fill="#4f5b57"/>
+ <path d="m74 39 17-4 16 32-24 10-17-21Z" fill="${cloth}"/><path d="m90 37 13 1 13 38-17-9" fill="${cloth}"/>
+ <path d="m78 43-8 16-13 11 5 4 18-9 7-16" fill="url(#steel)"/>
+ <path d="m93 44-9 7 2 18 10 7 10-9-2-20Z" fill="#346170" stroke="#d4bd7c" stroke-width="2"/><path d="m96 51-2 5-5 1 5 4 1 7 3-7 4-4-5-1Z" fill="#d4bd7c" stroke="none"/>
+ <path d="m77 22 12-6 12 8-1 15-9 8-12-8Z" fill="url(#steel)"/><path d="m80 29 18-2-1 8-16 2Z" fill="#354f50"/><path d="m88 28 1 9m3-10 1 9" stroke="#c6d2c6"/><path d="M87 17q-2-16 12-14l12 12-13-3-5 7" fill="${cloth}"/>
+ <path d="m59 72 5-59" stroke="#907745" stroke-width="2.5"/><path d="m64 14-3-10 5-4 2 13" fill="url(#steel)"/><path d="M65 16q12-5 22 3l-8 6 8 5-22-2Z" fill="${cloth}" stroke="#cbb677" stroke-width="1"/>
+ </g>`;
+  else if (type === "infantry" || type === "archer")
+    figure = `<g ${common}>
+ <path d="m69 91-6 34-9 5 2 5h19l5-42m14-2 7 34 8 5-1 5H92l-9-39" fill="url(#steel)"/>
+ <path d="m62 54 24-13 18 13-4 36 7 19-45 0 5-23Z" fill="${cloth}"/><path d="m68 99 30 0" stroke="#d9c38d" stroke-width="3"/><path d="m71 54 2 27 20 0 5-27" fill="url(#steel)"/>
+ <path d="m63 55-11 21 10 13 7-7-6-8 9-15m25-5 11 19-9 16-7-6 5-12-7-15" fill="url(#steel)"/>
+ <path d="m72 26 11-6 12 6 3 16-13 13-14-12Z" fill="url(#steel)"/><path d="m73 35 22-2-1 6-20 2Z" fill="#344e4e"/><path d="m84 34 1 14" stroke="#d6dfd0"/><path d="M80 21q-8-12 6-17l12 14-12-3-1 7" fill="${cloth}"/>
+ ${type === "infantry" ? `<path d="m46 103 8-87m-1 1-3-13 6-4 3 16Z" fill="url(#steel)" stroke="#8b794f" stroke-width="2"/><path d="m86 64 23-4 5 28-17 18-15-15Z" fill="${cloth}" stroke="#d6c18a" stroke-width="3"/><path d="m97 69 1 25m-9-15 16-3" stroke="#d6c18a" stroke-width="3"/>` : '<path d="M110 46q33 34-6 65l7-33Z" fill="none" stroke="#b29963" stroke-width="4"/><path d="m110 46-15 33 9 32M80 80h47m-4-3 5 3-5 3" fill="none" stroke="#dfd3a7" stroke-width="1.3"/>'}
+ </g>`;
+  else
+    figure = `<g ${common}><path d="m40 113 69-2 16 16-71 5Z" fill="#66563d"/><path d="m61 115 20-76 23 76m-38-15 30 0" fill="none" stroke="#ab9161" stroke-width="9"/><path d="m52 34 70 61" stroke="#d0b17b" stroke-width="7"/><path d="m53 33-13 33 23 8 10-23Z" fill="url(#stone)"/><path d="m122 95 12 8-5 10-12-6Z" fill="#796c51"/><path d="m86 46 12-22 9 3" fill="none" stroke="#ccb886"/><path d="m82 44 5-5" stroke="#57665b" stroke-width="5"/><circle cx="60" cy="128" r="14" fill="#86744e"/><circle cx="112" cy="124" r="14" fill="#86744e"/><g stroke="#ccb581" stroke-width="2"><path d="M60 115v26m-13-13h26m-22-9 18 18m0-18-18 18M112 111v26m-13-13h26m-22-9 18 18m0-18-18 18"/></g><circle cx="60" cy="128" r="3" fill="#48584f"/><circle cx="112" cy="124" r="3" fill="#48584f"/><path d="m83 47 0 42 16-4-2-35Z" fill="${cloth}" stroke="#d3b77c"/></g>`;
+  return base + figure;
+}
+function unitSvg(type, owner = "blue", cls = "") {
+  return `<svg class="unit-art ${cls}" viewBox="0 0 160 158" role="img" aria-label="${{ knight: "기병", infantry: "보병", archer: "궁병", siege: "투석기" }[type]} 말 일러스트">${unitArt(type, owner)}</svg>`;
+}
+function castleArt(owner = "blue", small = false) {
+  return `<g stroke="#6b715b" stroke-width="1.1" stroke-linejoin="round"><ellipse cx="0" cy="20" rx="31" ry="10" fill="#435d43" opacity=".18"/><path d="m-25-2 24-10 27 10v24L0 32l-25-10Z" fill="url(#stone)"/><path d="M0-12v44l26-10V-2Z" fill="#b1aa8c"/><path d="m-24-2 24 9 26-9M-16 1v19m8-15v20m16-20v20m9-24v19" fill="none" opacity=".35"/><path d="m-29-21 12-4 9 5v30l-9 5-12-5Zm42 1 11-5 9 5v30l-9 5-11-5Z" fill="url(#stone)"/><path d="m-29-21 0-8 5-2v6l5-1v-6l5 2v6l6-2v6-1m21 1v-8l5-2v6l5-1v-6l5 2v6l5-2v7" fill="url(#stone)"/><path d="m-9-19 9-5 10 5v22L0 8-9 3Z" fill="url(#stone)"/><path d="m-14-19 14-19 15 19-15 6Z" fill="${owner === "blue" ? "#3c7480" : "#a3604d"}"/><path d="M0-37v-16l16 4-16 5" fill="${owner === "blue" ? "#72b2bd" : "#d08b6c"}"/><path d="M-5 29V16q5-8 10 0v13" fill="#4c5d50"/><path d="M-23-14v7m45-7v7M0-9v6" stroke="#536550" stroke-width="3"/>${small ? '<path d="m-5-29 5-4 6 4" fill="none"/>' : ""}</g>`;
+}
+function terrainArt(t) {
+  const variant = Math.abs(t.q * 7 + t.r * 3) % 3;
+  if (t.terrain === "water")
+    return '<g fill="none" stroke="#b4d0be" stroke-width="1.4" opacity=".55"><path d="M-29-10q9-5 18 0t18 0M-13 5q9-5 18 0t18 0M-32 17q9-5 18 0t18 0"/></g>';
+  if (t.terrain === "forest")
+    return `<g opacity=".96"><use href="#pine" x="-32" y="-29" width="25" height="40"/><use href="#pine" x="-4" y="-38" width="30" height="48"/><use href="#pine" x="-18" y="-17" width="28" height="45"/><use href="#pine" x="17" y="-14" width="22" height="35"/></g>`;
+  if (t.terrain === "hills")
+    return `<use href="#mountain" x="-34" y="-35" width="68" height="58"/><path d="m-33 29 16-4 8 2m22-6 17 6" fill="none" stroke="#ccd3b8" opacity=".6"/>`;
+  if (t.terrain === "gold")
+    return '<g stroke="#9c844d" stroke-width="1"><path d="m-32 21 12-30 25-13 24 41Z" fill="#bca064"/><path d="m5-22-3 36 27 5" fill="#a18f61"/><path d="m-16 20 3-20 17-8 12 11 1 17" fill="#555d48"/><path d="m-18 22 2-24 20-9 15 12 1 21" fill="none" stroke="#e2c282" stroke-width="4"/><path d="m-11 20 5-7 7 4 3-9 7 8 4 5Z" fill="#ebcf71"/><path d="m-8 27 10-5 14 5-11 5Z" fill="#e3c875"/><path d="m-30 6 6-6 5 5-6 5m35-9 7-5 4 9-8 1" fill="#e4c678"/></g>';
+  return `<g><path d="m-36 10 24-21 41 13-23 25Z" fill="#a9a665" opacity=".65"/><path d="m-28 10 18-16m-12 21 20-18m-13 23 22-19m-14 23 22-19m-14 22 22-19" stroke="#dbd39a" stroke-width="2.5" opacity=".65"/><use href="#wheat" x="-27" y="-24" width="31" height="35"/><use href="#wheat" x="3" y="${-19 + variant * 3}" width="28" height="32"/><path d="M-36 25h7m51-38h6" stroke="#8e9b65"/></g>`;
+}
+function diceSvg(n) {
+  const dots = {
+    1: [[12, 12]],
+    2: [
+      [7, 7],
+      [17, 17],
+    ],
+    3: [
+      [7, 7],
+      [12, 12],
+      [17, 17],
+    ],
+    4: [
+      [7, 7],
+      [17, 7],
+      [7, 17],
+      [17, 17],
+    ],
+    5: [
+      [7, 7],
+      [17, 7],
+      [12, 12],
+      [7, 17],
+      [17, 17],
+    ],
+    6: [
+      [7, 6],
+      [17, 6],
+      [7, 12],
+      [17, 12],
+      [7, 18],
+      [17, 18],
+    ],
+  };
+  return `<svg viewBox="0 0 24 24" aria-label="주사위 ${n}"><rect x="1" y="1" width="22" height="22" rx="4" fill="#f3ecd8" stroke="#cbbd97"/>${dots[n].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.8" fill="#34574e"/>`).join("")}</svg>`;
+}
+
+
+const $ = (s) => document.querySelector(s),
+  $$ = (s) => [...document.querySelectorAll(s)];
+const serverMode = /^https?:$/.test(location.protocol) && !document.documentElement.hasAttribute("data-standalone");
+const memoryStore = new Map();
+let lastSavePersisted = true;
+const readStore = (k, storageName = "localStorage") => {
+  try {
+    return JSON.parse(window[storageName].getItem(k));
+  } catch {
+    return memoryStore.get(`${storageName}:${k}`) ?? null;
+  }
+};
+const writeStore = (k, v, storageName = "localStorage") => {
+  memoryStore.set(`${storageName}:${k}`, v);
+  try {
+    window[storageName].setItem(k, JSON.stringify(v));
+    return true;
+  } catch {
+    return false;
+  }
+};
+const saved = readStore("hexa-crown-save");
+function validSave(s) {
+  return (
+    s?.version === 1 &&
+    ["ai", "local"].includes(s.mode) &&
+    ["blue", "red"].includes(s.current) &&
+    Array.isArray(s.tiles) &&
+    s.tiles.length === 37 &&
+    s.tiles.every(
+      (t) => TERRAIN[t.terrain] && (!t.unit || UNITS[t.unit.type]),
+    ) &&
+    s.resources?.blue &&
+    s.resources?.red &&
+    Array.isArray(s.logs)
+  );
+}
+let state = validSave(saved) ? saved : createGame(),
+  selected = "-2,0",
+  zoom = 1,
+  soundEnabled = readStore("hexa-crown-sound") ?? false;
+let toastTimer,
+  aiTimer,
+  audioContext,
+  network = null,
+  socket = null,
+  retryTimer,
+  retries = 0,
+  dialogKind = "",
+  lastWinner = null;
+const modal = $("#modal");
+const ownSide = () =>
+  state.mode === "online"
+    ? network?.side
+    : state.mode === "ai"
+      ? "blue"
+      : state.current;
+const canControl = () =>
+  !state.winner &&
+  state.current === ownSide() &&
+  (state.mode !== "online" ||
+    (network?.connected?.blue &&
+      network?.connected?.red &&
+      socket?.readyState === WebSocket.OPEN));
+const costText = (cost) =>
+  Object.entries(cost)
+    .map(([r, n]) => `<span>${icon(r)} ${n}</span>`)
+    .join("");
+const turnText = () =>
+  state.winner
+    ? "원정 종료"
+    : state.mode === "online" &&
+        (!network?.connected?.blue || !network?.connected?.red)
+      ? "상대 사령관을 기다리는 중"
+      : state.mode === "ai" && state.current === "red"
+        ? "붉은 독수리가 진군 중입니다"
+        : state.current === ownSide()
+          ? "사령관님의 차례입니다"
+          : "상대 사령관의 차례입니다";
+
+$("#app").innerHTML = `<svg class="svg-defs" aria-hidden="true">${defs}</svg>
+<header class="topbar"><a class="brand" href="#" aria-label="HEXA CROWN 홈" style="color:inherit;text-decoration:none"><span class="brand-mark">${icon("crown")}</span><div><strong>HEXA CROWN</strong><small>A KINGDOM IS YOURS TO CLAIM</small></div></a><nav class="main-nav" aria-label="주 메뉴"><button class="active" id="battleTab" title="전장">${icon("sword")}전장</button><button id="guideButton" title="전쟁 지침서">${icon("book")}전쟁 지침서</button><button id="onlineButton" title="멀티플레이">${icon("globe")}멀티플레이</button></nav><div class="top-actions"><button class="icon-button" id="soundButton" aria-label="효과음 켜기"></button><div class="player-profile"><span class="avatar">C</span><div><span style="font-size:11px">사령관</span><small>아르덴의 개척자</small></div></div></div></header>
+<div id="connectionNotice" class="connection-notice hidden" role="status"></div>
+<main class="game-shell"><div class="page-heading"><div><div class="breadcrumb">왕국의 연대기 ${icon("chevron")} 아르덴 원정</div><div class="heading-title"><h1>왕관을 향한 진군</h1><span class="edition-tag">THE FIRST CHAPTER</span></div></div><div class="match-meta"><span>37개의 영토, 하나의 왕관</span><button class="mode-label" id="modeButton"><i class="status-dot"></i><span id="modeLabel"></span></button></div></div>
+<div class="game-layout"><aside class="left-rail" aria-label="군단 현황"><section id="commander" class="panel commander-panel"></section><section class="panel resources-panel"><div class="panel-inner"><div class="section-heading"><span>왕국의 보급품</span><small id="resourceOwner"></small></div><div id="resources" class="resource-grid"></div><button class="trade-link" id="tradeButton"><span>${icon("trade")} 보급 교역소</span><span>3 : 1 ${icon("chevron")}</span></button></div><div id="dice" class="dice-panel"></div></section><section class="panel objective panel-inner"><div class="section-heading"><span>${icon("crown")} 왕관을 차지하는 방법</span></div><p>영토를 넓혀 10점을 획득하거나<br>적의 본성을 함락하세요.</p><small>영토 3칸마다 +1 · 황금 광산 +1<br>전초기지 +1 · 본성 +2</small></section><section class="panel journal panel-inner"><div class="section-heading"><span>전장의 기록</span><small id="logTurn"></small></div><div id="logs" class="log-list" role="log" aria-live="polite"></div></section></aside>
+<section class="center-stage" aria-label="육각 전장"><div class="battlefield" id="battlefield"><div class="map-top"><div><h2>아르덴의 경계</h2><small>THE BORDERLANDS OF ARDEN</small></div><button class="icon-button" id="fullscreenButton" title="전장 전체 화면" aria-label="전장 전체 화면">${icon("expand")}</button></div><div class="map-viewport"><svg id="board" class="board-svg" viewBox="0 0 900 740" role="group" aria-label="37개 영토로 구성된 아르덴 전장"></svg></div><div class="map-bottom" style="bottom:59px"><div class="legend"><span><i class="mine"></i>아군 영토</span><span><i class="enemy"></i>적군 영토</span><span><i class="move"></i>이동 가능</span></div><div class="zoom"><button class="icon-button" id="zoomOut" aria-label="지도 축소">${icon("minus")}</button><small id="zoomValue">100%</small><button class="icon-button" id="zoomIn" aria-label="지도 확대">${icon("plus")}</button></div></div><div id="boardCaption" class="board-caption"></div></div><div id="turnControl" class="turn-control"></div><div class="map-footnote"><span>${icon("target")} 군단 선택 후 표시된 영토를 클릭하여 이동</span><span id="saveStatus">${icon("check")} 자동 저장됨</span></div></section>
+<aside class="right-rail" aria-label="군단 명령"><section id="inspector" class="panel selected-panel"></section><section class="panel recruit-panel"><div class="section-heading"><span>새로운 군단 모집</span><small>RECRUITMENT</small></div><div id="recruitList" class="recruit-list"></div><p class="recruit-hint">본성 또는 전초기지에서 새 군단을 모집합니다.</p></section></aside></div>
+<footer class="footer"><span class="footer-brand">HEXA CROWN <span style="font-family:var(--sans);letter-spacing:0;margin-left:9px">왕국은 당신의 선택으로 완성됩니다.</span></span><span>TURN-BASED STRATEGY · ORIGINAL VECTOR ART</span><button id="newGameButton">새로운 원정 시작 ${icon("reset")}</button></footer></main>`;
+
+function notify(message) {
+  clearTimeout(toastTimer);
+  $("#toast").textContent = message;
+  $("#toast").classList.add("show");
+  toastTimer = setTimeout(() => $("#toast").classList.remove("show"), 3400);
+}
+function sound(kind = "select") {
+  if (!soundEnabled) return;
+  try {
+    audioContext ??= new (window.AudioContext || window.webkitAudioContext)();
+    audioContext.resume();
+    const time = audioContext.currentTime;
+    const tones =
+      kind === "attack"
+        ? [130, 90]
+        : kind === "end"
+          ? [330, 440, 550]
+          : kind === "move"
+            ? [260, 390]
+            : [480];
+    tones.forEach((n, i) => {
+      const osc = audioContext.createOscillator(),
+        gain = audioContext.createGain();
+      osc.type = "triangle";
+      osc.frequency.value = n;
+      gain.gain.setValueAtTime(0.0001, time + i * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.08, time + i * 0.08 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + i * 0.08 + 0.2);
+      osc.connect(gain).connect(audioContext.destination);
+      osc.start(time + i * 0.08);
+      osc.stop(time + i * 0.08 + 0.21);
+    });
+  } catch {}
+}
+function renderCommander() {
+  const side = ownSide() || "blue",
+    other = side === "blue" ? "red" : "blue",
+    s = score(state, side),
+    e = score(state, other);
+  const track = (n, red = false) =>
+    `<div class="vp-track ${red ? "red" : ""}">${Array.from({ length: 10 }, (_, i) => `<span class="${i < n ? "filled" : ""}"></span>`).join("")}</div>`;
+  $("#commander").innerHTML =
+    `<div class="commander-banner">${crest(side)}<div><div class="eyebrow">YOUR LEGION</div><strong>${FACTIONS[side].name} 군단</strong><small>아르덴의 ${side === "blue" ? "서부" : "동부"} 수호자</small></div></div><div class="panel-inner"><div class="faction-statline"><span>왕관까지의 여정</span><span><strong>${s.vp}</strong> <small>/ 10 VP</small></span></div>${track(s.vp, side === "red")}<div class="faction-substats"><span>점령지 <b>${s.territory}</b></span><span>보유 군단 <b>${s.army}</b></span></div><div class="rival-row"><div class="faction-statline"><span class="rival-name">${crest(other)}${FACTIONS[other].name}</span><span><strong>${e.vp}</strong> <small>/ 10</small></span></div>${track(e.vp, other === "red")}</div></div>`;
+  let compact = $("#mobileScore");
+  if (!compact) {
+    compact = document.createElement("div");
+    compact.id = "mobileScore";
+    compact.className = "mobile-score";
+    $(".page-heading").after(compact);
+  }
+  compact.innerHTML = `<span>${crest(side)}${FACTIONS[side].name} <b>${s.vp}<small>/10</small></b></span><span class="versus">VS</span><span>${crest(other)}${FACTIONS[other].name} <b>${e.vp}<small>/10</small></b></span>`;
+}
+function renderResources() {
+  const side = ownSide() || "blue";
+  $("#resourceOwner").textContent = FACTIONS[side].name;
+  $("#resources").innerHTML = Object.entries(RESOURCES)
+    .map(
+      ([r, name]) =>
+        `<div class="resource-cell"><span class="resource-symbol ${r}">${icon(r)}</span><div><small>${name}</small><strong data-resource="${r}">${state.resources[side][r]}</strong></div></div>`,
+    )
+    .join("");
+  $("#dice").innerHTML =
+    `<div><strong>이번 턴의 생산</strong><small>같은 숫자의 영토에서 수급</small></div><div class="dice-pair">${state.dice.map(diceSvg).join("")}<b>${state.dice[0] + state.dice[1]}</b></div>`;
+}
+const hexPoints = (radius = 53.7) =>
+  Array.from({ length: 6 }, (_, i) => {
+    const a = ((60 * i - 30) * Math.PI) / 180;
+    return `${Math.cos(a) * radius},${Math.sin(a) * radius}`;
+  }).join(" ");
+const position = (t) => ({
+  x: 450 + Math.sqrt(3) * 55 * (t.q + t.r / 2),
+  y: 365 + 82.5 * t.r,
+});
+function renderBoard() {
+  $("#board").setAttribute(
+    "viewBox",
+    window.innerWidth <= 700 ? "70 -35 760 775" : "0 0 900 740",
+  );
+  const available = canControl()
+    ? options(state, selected)
+    : { moves: [], attacks: [] };
+  const active = tileAt(state, selected);
+  const tiles = state.tiles
+    .map((t) => {
+      const k = key(t),
+        p = position(t),
+        isSelected = k === selected,
+        move = available.moves.includes(k),
+        attack = available.attacks.includes(k),
+        owner = t.owner;
+      const color = TERRAIN[t.terrain].color;
+      const ownerColor = owner ? FACTIONS[owner].color : "";
+      const title = `${TERRAIN[t.terrain].name}${owner ? " · " + FACTIONS[owner].name : " · 중립"}${t.unit ? " · " + UNITS[t.unit.type].name : ""}${move ? " · 이동 가능" : ""}${attack ? " · 공격 가능" : ""}`;
+      let figure = t.building
+        ? `<g transform="translate(${t.unit ? -17 : 0},-9) scale(${t.unit ? 0.61 : 0.83})">${castleArt(owner)}</g>`
+        : "";
+      if (t.unit)
+        figure += `<g class="tile-figure" transform="translate(${t.building ? -29 : -40},-48) scale(.5)">${unitArt(t.unit.type, t.unit.owner)}</g><rect x="-16" y="30" width="32" height="3" rx="1.5" fill="#2a463c" opacity=".65"/><rect x="-16" y="30" width="${(32 * t.unit.hp) / UNITS[t.unit.type].hp}" height="3" rx="1.5" fill="${t.unit.owner === "blue" ? "#b7e2cd" : "#f0b299"}"/>`;
+      const number = t.number
+        ? `<g class="tile-label" transform="translate(${t.unit || t.building ? -29 : 0},${t.unit || t.building ? 24 : 31})"><circle r="10" fill="#3e5846" fill-opacity=".9" stroke="#ddd9a8" stroke-width=".7"/><text text-anchor="middle" y="3.8" class="tile-number ${[6, 8].includes(t.number) ? "hot" : ""}">${t.number}</text>${[6, 8].includes(t.number) ? '<circle cx="-2" cy="7" r=".7" fill="#e9c788"/><circle cx="2" cy="7" r=".7" fill="#e9c788"/>' : ""}</g>`
+        : "";
+      return `<g class="hex-tile ${isSelected ? "selected" : ""} ${move ? "reachable" : ""} ${attack ? "attackable" : ""}" data-tile="${k}" role="button" tabindex="0" aria-label="${title}" aria-pressed="${isSelected}" transform="translate(${p.x},${p.y})"><title>${title}</title><polygon points="${hexPoints()}" transform="translate(0,7)" fill="${t.terrain === "water" ? "#28535a" : "#586f50"}" stroke="#1b3d35" stroke-width="1.4"/><polygon points="${hexPoints()}" fill="${color}" stroke="#d9d7a2" stroke-width=".6"/><polygon points="${hexPoints()}" fill="url(#grain)"/><g class="tile-art" opacity="${t.unit || t.building ? 0.3 : 1}">${terrainArt(t)}</g>${owner ? `<polygon class="tile-owner" points="${hexPoints(49)}" fill="${ownerColor}" fill-opacity=".12" stroke="${ownerColor}" stroke-width="2" stroke-opacity=".95"/><path d="m-7-43 7 4 7-4" fill="none" stroke="${owner === "blue" ? "#d5eee3" : "#eac5a3"}" stroke-width="2"/>` : ""}${figure}${number}<polygon class="hex-outline" points="${hexPoints(53)}" fill="none" stroke="transparent" stroke-width="2"/>${move ? '<g class="move-dot"><circle r="10" fill="#294d3f" fill-opacity=".55" stroke="#f4e5ad" stroke-width="1"/><circle r="3" fill="#f4e5ad"/></g>' : ""}${attack ? `<g transform="translate(0,-12)"><circle r="16" fill="#853e32"/><path d="m-6-6 12 12M-6 6 6-6" stroke="#f7dfb5" stroke-width="2"/><text text-anchor="middle" y="32" fill="#fff0ca" font-size="11">−${damage(active, t)} HP</text></g>` : ""}</g>`;
+    })
+    .join("");
+  $("#board").innerHTML =
+    `<rect width="900" height="740" fill="url(#waves)"/><path d="M40 100V76h24M860 100V76h-24M40 640v24h24M860 640v24h-24" stroke="#91a487" stroke-opacity=".25" fill="none"/><text x="88" y="490" class="sea-label" transform="rotate(-65 88 490)">THE WESTERN SEA</text><text x="762" y="375" class="sea-label" transform="rotate(65 762 375)">SILENT WATERS</text><ellipse cx="450" cy="385" rx="340" ry="287" fill="#153c30" opacity=".25"/><g class="board-tiles" style="transform:scale(${zoom})">${tiles}</g><g transform="translate(802 594)" opacity=".6"><circle r="25" fill="none" stroke="#a8b99c" stroke-width=".6"/><path d="m0-31 6 25 25 6-25 6-6 25-6-25-25-6 25-6Z" fill="none" stroke="#bac4a1" stroke-width=".7"/><path d="M0-27 6-6 0 0-6-6Z" fill="#c0c6a3"/><text class="compass-label" text-anchor="middle" y="-37">N</text></g>`;
+  $("#boardCaption").innerHTML =
+    `<span>${icon("flag")}${active?.unit ? `${UNITS[active.unit.type].name} 선택됨${available.moves.length ? " · 빛나는 영토로 진군하세요" : active.unit.moved ? " · 이동 완료" : ""}` : active ? `${TERRAIN[active.terrain].name} · ${active.owner ? FACTIONS[active.owner].name + "의 영토" : "미점령 영토"}` : "지도의 군단을 선택하세요"}</span><small>${state.tiles.filter((t) => t.owner).length} / 37 영토 점령</small>`;
+  $("#zoomValue").textContent = `${Math.round(zoom * 100)}%`;
+  $("#zoomOut").disabled = zoom <= 0.8;
+  $("#zoomIn").disabled = zoom >= 1.4;
+}
+function renderInspector() {
+  const t = tileAt(state, selected);
+  if (!t) return;
+  const u = t.unit,
+    spec = u ? UNITS[u.type] : null,
+    mine = u?.owner === ownSide(),
+    control = canControl();
+  const terrain = TERRAIN[t.terrain];
+  const canBuild =
+    control &&
+    t.owner === state.current &&
+    !t.building &&
+    canAfford(state, state.current, OUTPOST_COST);
+  $("#inspector").innerHTML =
+    `<div class="selected-head"><span>${u ? "선택한 군단" : "선택한 영토"}</span><span class="unit-status"><i></i>${u ? (u.owner === ownSide() ? (u.moved ? "기동 완료" : "명령 대기") : "적 군단") : t.owner ? FACTIONS[t.owner].name : "중립 영토"}</span></div><div class="portrait">${u ? unitSvg(u.type, u.owner) : `<svg class="terrain-portrait" viewBox="-60 -60 120 120">${t.building ? castleArt(t.owner) : terrainArt(t)}</svg>`}<span class="portrait-coord">${t.q} / ${t.r}</span></div><div class="unit-details"><div class="unit-name"><h2>${u ? spec.name : t.building === "citadel" ? "왕국의 본성" : t.building ? "전초기지" : terrain.name}</h2><div class="eyebrow">${u ? spec.english : "TERRITORY OF ARDEN"}</div><p>${u ? FACTIONS[u.owner].name + " 군단 · " : ""}${terrain.name}</p></div>${u ? `<div class="health-line"><span>부대 체력</span><b>${u.hp} / ${spec.hp}</b></div><div class="health-track">${Array.from({ length: spec.hp }, (_, i) => `<i class="${i >= u.hp ? "empty" : ""}"></i>`).join("")}</div><div class="unit-stats"><div class="unit-stat">${icon("sword")}<strong>${spec.attack}</strong><small>공격력</small></div><div class="unit-stat">${icon("move")}<strong>${spec.move}</strong><small>이동 범위</small></div><div class="unit-stat">${icon("target")}<strong>${spec.range}</strong><small>공격 사거리</small></div></div><p class="unit-description">${spec.desc}</p>` : `<div class="unit-stats"><div class="unit-stat">${icon(terrain.resource || "leaf")}<strong>${t.building ? 2 : 1}</strong><small>${terrain.resource ? RESOURCES[terrain.resource] + " 생산" : "이동 불가"}</small></div><div class="unit-stat">${icon("shield")}<strong>${terrain.defense + (t.building ? 1 : 0)}</strong><small>방어 보너스</small></div><div class="unit-stat"><strong>${t.number || "—"}</strong><small>생산 주사위</small></div></div><p class="unit-description">${terrain.desc}</p>`}<div class="action-row"><button class="primary" data-command="heal" ${!control || !mine || u.hp >= spec.hp || state.resources[state.current].food < 1 ? "disabled" : ""} title="식량 1로 체력 4 회복">${icon("health")}재보급</button><button data-command="build" ${!canBuild ? "disabled" : ""} title="목재 2 · 철광 1 · 황금 1">${icon("castle")}전초기지</button></div></div>`;
+}
+function renderRecruit() {
+  const allowed = canControl();
+  $("#recruitList").innerHTML = Object.entries(UNITS)
+    .map(
+      ([type, u]) =>
+        `<button class="recruit-card" data-recruit="${type}" ${!allowed || !canAfford(state, state.current, u.cost) || !spawnTile(state, state.current, selected) ? "disabled" : ""} title="${u.name} 모집 · ${Object.entries(
+          u.cost,
+        )
+          .map(([r, n]) => `${RESOURCES[r]} ${n}`)
+          .join(
+            " · ",
+          )}">${unitSvg(type, ownSide() || "blue")}<span><strong>${u.name}</strong><small>${costText(u.cost)}</small></span>${icon("plus")}</button>`,
+    )
+    .join("");
+}
+function render() {
+  if (!tileAt(state, selected)) selected = "-2,0";
+  renderCommander();
+  renderResources();
+  renderBoard();
+  renderInspector();
+  renderRecruit();
+  $("#turnControl").innerHTML =
+    `<div class="turn-number"><small>ROUND</small><strong>${String(state.turn).padStart(2, "0")}</strong></div><div class="turn-phase"><strong>${turnText()}</strong><div class="phase-steps"><span>${icon("check")} 자원 수급</span><span class="line"></span><span class="active"><i></i> 군단 지휘</span><span class="line"></span><span>턴 종료</span></div></div><button class="end-turn" id="endTurn" ${canControl() ? "" : "disabled"}>턴 종료 ${icon("arrow")}</button>`;
+  $("#logs").innerHTML = state.logs
+    .slice(0, 8)
+    .map(
+      (l) =>
+        `<div class="log-item"><i class="log-bullet ${l.owner}"></i><div>${l.text}<small>ROUND ${String(l.turn).padStart(2, "0")}</small></div></div>`,
+    )
+    .join("");
+  $("#logTurn").textContent = `ROUND ${String(state.turn).padStart(2, "0")}`;
+  $("#modeLabel").textContent =
+    state.mode === "online"
+      ? `온라인 · ${network?.code || "연결 중"}`
+      : state.mode === "local"
+        ? "2인 교대 대전"
+        : "AI 사령관 대전";
+  $("#soundButton").innerHTML = icon(soundEnabled ? "volume" : "mute");
+  $("#soundButton").setAttribute(
+    "aria-label",
+    soundEnabled ? "효과음 끄기" : "효과음 켜기",
+  );
+  if (state.mode !== "online") lastSavePersisted = writeStore("hexa-crown-save", state);
+  $("#saveStatus").innerHTML =
+    icon("check") + (state.mode === "online" ? "실시간 동기화" : lastSavePersisted ? "자동 저장됨" : "이번 창에서 플레이 중");
+  $("#saveStatus").title = lastSavePersisted ? "" : "브라우저에서 저장을 허용하지 않아 창을 닫으면 진행 상황이 사라집니다.";
+  if (state.winner && lastWinner !== state.winner) {
+    lastWinner = state.winner;
+    setTimeout(showVictory, 450);
+  }
+}
+function command(a, automated = false) {
+  if (!automated && !canControl()) {
+    notify(
+      state.winner
+        ? "원정이 종료되었습니다. 새 원정을 시작하세요."
+        : turnText(),
+    );
+    return;
+  }
+  if (state.mode === "online") {
+    socket.send(JSON.stringify({ type: "action", action: a }));
+    return;
+  }
+  const result = act(state, a);
+  if (!result.ok) {
+    if (!automated) notify(result.error);
+    return;
+  }
+  if (result.selected) selected = result.selected;
+  sound(a.type);
+  render();
+  if (!automated && a.type === "recruit")
+    notify(`${UNITS[a.unit].name}이 전장에 합류했습니다.`);
+  if (!automated && a.type === "build")
+    notify("전초기지 건설 완료 · 생산량 2배 · 승리 점수 +1");
+  scheduleAI();
+}
+function scheduleAI() {
+  clearTimeout(aiTimer);
+  if (state.mode === "ai" && state.current === "red" && !state.winner)
+    aiTimer = setTimeout(() => command(aiAction(state), true), 620);
+}
+function selectTile(k) {
+  const available = canControl()
+    ? options(state, selected)
+    : { moves: [], attacks: [] };
+  if (available.moves.includes(k)) {
+    command({ type: "move", from: selected, to: k });
+    return;
+  }
+  if (available.attacks.includes(k)) {
+    command({ type: "attack", from: selected, to: k });
+    return;
+  }
+  selected = k;
+  sound();
+  renderBoard();
+  renderInspector();
+  renderRecruit();
+}
+$("#board").addEventListener("click", (e) => {
+  const t = e.target.closest("[data-tile]");
+  if (t) selectTile(t.dataset.tile);
+});
+$("#board").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    const t = e.target.closest("[data-tile]");
+    if (t) {
+      e.preventDefault();
+      const k = t.dataset.tile;
+      selectTile(k);
+      $(`[data-tile="${k}"]`)?.focus({ preventScroll: true });
+    }
+  }
+});
+$("#turnControl").addEventListener("click", (e) => {
+  if (e.target.closest("#endTurn")) command({ type: "end" });
+});
+$("#recruitList").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-recruit]");
+  if (b && !b.disabled)
+    command({ type: "recruit", unit: b.dataset.recruit, tile: selected });
+});
+$("#inspector").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-command]");
+  if (b && !b.disabled) command({ type: b.dataset.command, tile: selected });
+});
+$("#zoomIn").onclick = () => {
+  zoom = Math.min(1.4, Math.round((zoom + 0.1) * 10) / 10);
+  renderBoard();
+};
+$("#zoomOut").onclick = () => {
+  zoom = Math.max(0.8, Math.round((zoom - 0.1) * 10) / 10);
+  renderBoard();
+};
+$("#fullscreenButton").onclick = async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else if ($("#battlefield").requestFullscreen)
+      await $("#battlefield").requestFullscreen();
+    else notify("이 브라우저는 전체 화면을 지원하지 않습니다.");
+  } catch {
+    notify("전체 화면 전환을 사용할 수 없습니다.");
+  }
+};
+$("#soundButton").onclick = () => {
+  soundEnabled = !soundEnabled;
+  writeStore("hexa-crown-sound", soundEnabled);
+  sound();
+  render();
+};
+$("#battleTab").onclick = () =>
+  $("#battlefield").scrollIntoView({ behavior: "smooth", block: "center" });
+
+function openDialog(title, body, kind = "") {
+  dialogKind = kind;
+  $("#modalContent").innerHTML =
+    `<div class="modal-header"><h2>${title}</h2><button class="icon-button" id="closeDialog" aria-label="닫기">${icon("close")}</button></div><div class="modal-body">${body}</div>`;
+  if (!modal.open) modal.showModal();
+  $("#closeDialog").onclick = () => modal.close();
+}
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    const r = modal.getBoundingClientRect();
+    if (
+      e.clientX < r.left ||
+      e.clientX > r.right ||
+      e.clientY < r.top ||
+      e.clientY > r.bottom
+    )
+      modal.close();
+  }
+});
+modal.addEventListener("close", () => {
+  dialogKind = "";
+});
+function showRules() {
+  openDialog(
+    "사령관의 전쟁 지침서",
+    `<p>37개의 육각 영토 위에서 군단을 지휘하세요. 영토를 점령하고, 자원을 확보하며, 아르덴의 왕관에 다가갑니다.</p><h3>한 턴의 흐름</h3><ol><li><b>자원 수급</b> — 턴 시작 시 주사위 2개를 자동으로 굴립니다. 합계와 같은 숫자의 점령지에서 양쪽 군단이 자원을 받습니다. 7이 나오면 양쪽에 식량·목재가 1씩 보급됩니다.</li><li><b>군단 지휘</b> — 아군 말을 선택한 뒤 표시된 칸을 눌러 이동·점령하세요. 부대마다 이동 1회, 공격 1회가 가능합니다. 공격하면 남은 이동은 끝납니다.</li><li><b>보급과 확장</b> — 부대를 모집하고 전초기지를 건설하세요. 자원이 충분하면 한 턴에 여러 번 가능합니다.</li><li><b>턴 종료</b> — 상대 군단이 지휘를 시작합니다.</li></ol><h3>군단과 상성</h3><table><thead><tr><th>병종</th><th>체력</th><th>공격</th><th>이동</th><th>사거리</th></tr></thead><tbody>${Object.values(
+      UNITS,
+    )
+      .map(
+        (u) =>
+          `<tr><td>${u.name}</td><td>${u.hp}</td><td>${u.attack}</td><td>${u.move}</td><td>${u.range}</td></tr>`,
+      )
+      .join(
+        "",
+      )}</tbody></table><p>장궁병 → 보병 +2 / 기병 → 궁병·투석기 +2 / 투석기 → 건물 주둔군 +3. 숲은 방어 +1, 산은 +2, 건물은 추가 +1입니다. 피해는 최소 2. 인접 공격에서 생존한 수비군은 공격력의 60%로 반격합니다.</p><h3>영토와 보급</h3><ul><li>새 영토를 점령하면 해당 자원을 즉시 1 획득합니다.</li><li>본성과 전초기지는 자원 생산량이 2배입니다.</li><li>전초기지: 목재 2 · 철광 1 · 황금 1. 빈 아군 영토에 건설합니다.</li><li>재보급: 식량 1로 체력 4를 회복합니다.</li><li>교역소: 식량·목재·철광 중 3개를 황금 1로 교환합니다.</li><li>기병은 아군 부대를 통과할 수 있으나 적이나 호수를 통과할 수 없습니다.</li></ul><h3>승리 조건</h3><p>영토 3칸마다 1점, 황금 광산마다 1점, 전초기지마다 1점, 본성마다 2점. 먼저 10점에 도달하거나 적 본성을 점령하면 승리합니다.</p>`,
+    "rules",
+  );
+}
+$("#guideButton").onclick = showRules;
+function showTrade() {
+  const side = ownSide();
+  openDialog(
+    "왕국의 보급 교역소",
+    `<p>보유한 자원 3개를 황금 1개로 교환합니다.</p>${["food", "wood", "iron"].map((r) => `<button class="trade-option" data-trade="${r}" ${!canControl() || state.resources[side][r] < 3 ? "disabled" : ""}><span>${icon(r)} ${RESOURCES[r]} 3 <small class="muted">보유 ${state.resources[side][r]}</small></span><span>${icon("arrow")} ${icon("gold")} 황금 1</span></button>`).join("")}`,
+    "trade",
+  );
+  $$("[data-trade]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        command({ type: "trade", resource: b.dataset.trade });
+        if (state.mode === "online") modal.close();
+        else showTrade();
+      }),
+  );
+}
+$("#tradeButton").onclick = showTrade;
+function startNew(mode = "ai") {
+  clearTimeout(aiTimer);
+  leaveOnline();
+  state = createGame(mode);
+  selected = "-2,0";
+  lastWinner = null;
+  zoom = 1;
+  modal.close();
+  render();
+  notify("새로운 원정이 시작되었습니다.");
+}
+function showModes() {
+  openDialog(
+    "어떤 원정을 떠나시겠습니까?",
+    `<p>새로운 원정을 시작하면 현재 기기의 AI·교대 대전 저장을 대체합니다.</p><div class="mode-cards"><button class="mode-card" data-mode="ai">${icon("sword")}<span><strong>AI 사령관과 대전</strong><small>푸른 사자 군단을 이끌고 붉은 독수리에 맞서세요.</small></span></button><button class="mode-card" data-mode="local">${icon("people")}<span><strong>둘이서 교대 대전</strong><small>한 화면에서 두 사령관이 번갈아 군단을 지휘합니다.</small></span></button><button class="mode-card" data-mode="online">${icon("globe")}<span><strong>온라인 대전</strong><small>대전방을 만들고 친구에게 방 코드를 전하세요.</small></span></button></div>`,
+    "modes",
+  );
+  $$("[data-mode]").forEach(
+    (b) =>
+      (b.onclick = () =>
+        b.dataset.mode === "online" ? showOnline() : startNew(b.dataset.mode)),
+  );
+}
+$("#modeButton").onclick = () =>
+  state.mode === "online" ? showOnline() : showModes();
+$("#newGameButton").onclick = showModes;
+$("#onlineButton").onclick = showOnline;
+function showVictory() {
+  if (!state.winner) return;
+  openDialog(
+    "아르덴의 새로운 왕",
+    `<div class="victory-art">${crest(state.winner)}</div><div class="victory-copy">${FACTIONS[state.winner].name} 군단의 승리</div><p style="text-align:center;margin-top:14px">${state.reason}<br>${state.turn}라운드 · ${score(state, state.winner).territory}개 영토 · ${score(state, state.winner).vp} VP</p><div class="modal-actions"><button class="btn" id="reviewMap">전장 살펴보기</button><button class="btn primary" id="nextCampaign">새 원정 시작 ${icon("arrow")}</button></div>`,
+    "victory",
+  );
+  $("#reviewMap").onclick = () => modal.close();
+  $("#nextCampaign").onclick = showModes;
+}
+
+function leaveOnline() {
+  clearTimeout(retryTimer);
+  network = null;
+  if (socket) {
+    socket.onclose = null;
+    socket.close();
+    socket = null;
+  }
+  try {
+    sessionStorage.removeItem("hexa-crown-room");
+  } catch {}
+  $("#connectionNotice").classList.add("hidden");
+}
+function connect(message) {
+  if (!serverMode) { showOnline(); return; }
+  clearTimeout(retryTimer);
+  if (socket?.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(message));
+    return;
+  }
+  if (socket) {
+    socket.onclose = null;
+    socket.close();
+  }
+  socket = new WebSocket(
+    `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/play`,
+  );
+  socket.onopen = () => {
+    retries = 0;
+    socket.send(JSON.stringify(message));
+  };
+  socket.onmessage = (e) => {
+    const m = JSON.parse(e.data);
+    if (m.type === "seat") {
+      network = { ...network, code: m.code, side: m.side, token: m.token };
+      writeStore(
+        "hexa-crown-room",
+        { code: m.code, token: m.token },
+        "sessionStorage",
+      );
+      selected = m.side === "blue" ? "-2,0" : "2,0";
+      return;
+    }
+    if (m.type === "error") {
+      if (m.resumeFailed) {
+        leaveOnline();
+        state = validSave(saved) ? saved : createGame();
+        render();
+      }
+      const err = $("#onlineError");
+      if (err) err.textContent = m.message;
+      notify(m.message);
+      return;
+    }
+    if (m.type === "state") {
+      clearTimeout(aiTimer);
+      const previous = state.current;
+      state = m.state;
+      network = {
+        ...network,
+        code: m.code,
+        side: m.side,
+        connected: m.connected,
+      };
+      if (m.actor === m.side && m.action?.type !== "end" && m.selected)
+        selected = m.selected;
+      if (previous !== state.current && state.current === network.side)
+        selected = key(
+          state.tiles.find((t) => t.unit?.owner === network.side) ||
+            state.tiles[0],
+        );
+      $("#connectionNotice").classList.toggle(
+        "hidden",
+        m.connected.blue && m.connected.red,
+      );
+      $("#connectionNotice").textContent =
+        "상대 사령관의 접속을 기다리고 있습니다. 방 코드를 공유하세요.";
+      render();
+      if (m.action) sound(m.action.type);
+      if (dialogKind === "online") showOnline();
+    }
+  };
+  socket.onclose = (e) => {
+    if (e.code === 4000) {
+      leaveOnline();
+      notify("이 방을 다른 창에서 열었습니다.");
+      state = createGame();
+      render();
+      return;
+    }
+    if (network) {
+      network.connected = { blue: false, red: false };
+      render();
+      $("#connectionNotice").classList.remove("hidden");
+      $("#connectionNotice").textContent =
+        "서버 연결이 끊어졌습니다. 자동으로 다시 연결합니다.";
+      retryTimer = setTimeout(
+        () =>
+          connect({ type: "resume", code: network.code, token: network.token }),
+        Math.min(1000 * 2 ** retries++, 15000),
+      );
+    } else {
+      const err = $("#onlineError");
+      if (err)
+        err.textContent =
+          "서버에 연결하지 못했습니다. 서버 실행 상태를 확인하세요.";
+    }
+  };
+  socket.onerror = () => {};
+}
+function showOnline() {
+  if (!serverMode) {
+    openDialog(
+      "함께 플레이하기",
+      `<p>이 파일에서는 설치 없이 AI 대전과 같은 기기의 2인 교대 대전을 즐길 수 있습니다.</p><p>서로 다른 기기에서 온라인으로 대전하려면 서버로 실행한 게임에 접속하세요. 프로젝트 폴더에서 <code>npm ci</code> 후 <code>npm start</code>로 서버를 실행할 수 있습니다.</p><div class="modal-actions"><button class="btn" id="continueOffline">현재 원정 계속</button><button class="btn primary" id="localMatch">새 2인 교대 대전 ${icon("people")}</button></div>`,
+      "offline-online-help",
+    );
+    $("#continueOffline").onclick = () => modal.close();
+    $("#localMatch").onclick = () => startNew("local");
+    return;
+  }
+  if (state.mode === "online" && network) {
+    openDialog(
+      "함께하는 아르덴 원정",
+      `<p>같은 서버 주소에 접속한 친구에게 아래 방 코드를 전달하세요. 당신은 <b>${FACTIONS[network.side].name}</b> 군단입니다.</p><div class="room-code">${network.code}</div><div class="room-status"><i class="status-dot"></i>${network.connected?.blue && network.connected?.red ? "두 사령관이 준비되었습니다." : "상대 사령관의 접속을 기다리고 있습니다."}</div><label for="inviteLink">친구에게 보낼 초대 주소</label><input id="inviteLink" class="invite-link" aria-label="초대 주소" readonly><p id="inviteHelp" class="invite-help"></p><div class="modal-actions"><button class="btn" id="copyRoom">${icon("link")}초대 링크 복사</button><button class="btn primary" id="returnBattle">전장으로 ${icon("arrow")}</button></div><p class="inline-error" id="onlineError"></p><p style="font-size:10px;margin:12px 0 0">방은 서버가 실행되는 동안 유지됩니다. 연결이 끊기면 상대가 돌아올 때까지 전투가 일시 정지됩니다.</p>`,
+      "online",
+    );
+    $("#returnBattle").onclick = () => modal.close();
+    const u = new URL(location.origin + location.pathname);
+    u.searchParams.set("room", network.code);
+    const inviteField = $("#inviteLink");
+    inviteField.value = u.href;
+    inviteField.onclick = () => inviteField.select();
+    $("#inviteHelp").textContent = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)
+      ? "이 주소는 이 컴퓨터에서만 열립니다. 같은 와이파이의 친구를 초대하려면 서버 실행 창에 나온 와이파이 주소로 다시 접속해 방을 만드세요."
+      : "친구가 이 주소를 열고 참가를 누르면 함께 플레이할 수 있습니다. 와이파이 주소라면 같은 네트워크에 연결해 주세요.";
+    $("#copyRoom").onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(u.href);
+        notify("초대 링크를 복사했습니다.");
+      } catch {
+        inviteField.focus();
+        inviteField.select();
+        $("#onlineError").textContent = "자동 복사를 사용할 수 없습니다. 선택된 초대 주소를 길게 누르거나 Ctrl+C / Command+C로 복사하세요.";
+      }
+    };
+    return;
+  }
+  openDialog(
+    "온라인 원정에 참가하기",
+    `<p>같은 서버에 접속한 두 사령관이 실시간으로 턴을 주고받습니다. 새로운 방을 만들거나 친구의 코드를 입력하세요.</p><button class="btn primary" id="createRoom" style="width:100%">${icon("plus")}새 대전방 만들기</button><h3>초대받은 원정 참가</h3><form class="room-form" id="joinForm"><input id="roomInput" aria-label="대전방 코드" placeholder="6자리 방 코드" maxlength="6" pattern="[A-Fa-f0-9]{6}" required autocomplete="off"><button class="btn" type="submit">참가 ${icon("arrow")}</button></form><div class="inline-error" id="onlineError" role="status"></div>`,
+    "online",
+  );
+  $("#createRoom").onclick = () => connect({ type: "create" });
+  $("#joinForm").onsubmit = (e) => {
+    e.preventDefault();
+    connect({ type: "join", code: $("#roomInput").value.trim().toUpperCase() });
+  };
+}
+
+render();
+scheduleAI();
+let resizeFrame;
+window.addEventListener("resize", () => {
+  cancelAnimationFrame(resizeFrame);
+  resizeFrame = requestAnimationFrame(renderBoard);
+});
+const roomSession = serverMode ? readStore("hexa-crown-room", "sessionStorage") : null,
+  invite = new URLSearchParams(location.search).get("room");
+if (roomSession?.code && roomSession?.token) {
+  clearTimeout(aiTimer);
+  connect({ type: "resume", ...roomSession });
+} else if (serverMode && invite && /^[0-9a-f]{6}$/i.test(invite)) {
+  showOnline();
+  $("#roomInput").value = invite.toUpperCase();
+}
+
+})();
+</script>
+</body>
+</html>
